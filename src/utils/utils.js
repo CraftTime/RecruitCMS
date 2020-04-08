@@ -7,7 +7,7 @@ export function isUnpay(status) {
 }
 
 export function isSuccess(response) {
-	return response !== null && response !== undefined ? Data.API_STATUS_SUCCESS === response.meta.code: false;
+	return response !== null && response !== undefined ? Data.API_STATUS_SUCCESS_2 === response.statusCode: false;
 }
 
 export function isEmpty(val) {

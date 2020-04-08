@@ -4,7 +4,6 @@ import pathToRegexp from 'path-to-regexp';
 import { Link } from 'dva/router';
 import styles from './index.less';
 import * as AppInfo from '../../utils/AppInfo';
-import AppIcon from '../../assets/fujian_art_exam_logo.png';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -222,7 +221,7 @@ export default class SiderMenu extends PureComponent {
       >
         <div className={styles.logo} key="logo">
           <Link to="/">
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" style={{borderRadius:'50%'}}/>
             <h1>{AppInfo.APP_NAME}</h1>
           </Link>
         </div>

@@ -154,17 +154,18 @@ export function request2(url, options, successCB, failedCB) {
 
 	newOptions.headers['access-token'] = localStorage.getItem("access_token");
 
-	if (newOptions.method === 'DELETE') {
-		const params = newOptions.params;
-		let paramsArray = [];
-		//拼接参数
-		Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
-		if (url.search(/\?/) === -1) {
-			url += '?' + paramsArray.join('&');
-		} else {
-			url += '&' + paramsArray.join('&');
-		}
-	}
+	// 20200407 在本系统不需要将DELETE的参数请求进行转换
+	// if (newOptions.method === 'DELETE') {
+	// 	const params = newOptions.params;
+	// 	let paramsArray = [];
+	// 	//拼接参数
+	// 	Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+	// 	if (url.search(/\?/) === -1) {
+	// 		url += '?' + paramsArray.join('&');
+	// 	} else {
+	// 		url += '&' + paramsArray.join('&');
+	// 	}
+	// }
 	return fetch(url, newOptions)
 		.then(checkStatus)
 		.then((response) => {

@@ -66,50 +66,7 @@ const menuData = [
 	{
 		name: '选项管理',
 		icon: 'setting',
-		path: 'option',
-		children: [
-			{
-				name: '城市',
-				path: 'city'
-			},
-			{
-				name: '年龄',
-				path: 'age'
-			},
-			{
-				name: '行业',
-				path: 'industry'
-			},
-			{
-				name: '职业',
-				path: 'occupation'
-			},
-			{
-				name: '学历',
-				path: 'education'
-			},
-			{
-				name: '待遇',
-				path: 'treatment'
-			},
-			{
-				name: '工作经验',
-				path: 'work-experience'
-			},
-			{
-				name: '工作时间',
-				path: ' work-date'
-			},
-			{
-				name: '公司规模',
-				path: 'scale'
-			},
-			{
-				name: '薪资待遇',
-				path: 'salary'
-			},
-
-		]
+		path: 'options',
 	}
 ];
 

@@ -1,14 +1,19 @@
 
-//测试服务器
-// const API_SERVER_URL = 'https://www.jichuangtech.site:9998';
-//正式服务器
-// const API_SERVER_URL = 'https://www.yk0591.com/admin';
-const API_SERVER_URL = 'http://139.196.75.120:9998';
-// const API_OVERSEASSTUDY_SERVER_URL = 'http://localhost:8881/overseasstudy';
+//正式服务器 Craft time
+// const API_SERVER_URL = '//http://34.229.235.238/recruit/admin';
+
+//本地测试服务器
+const API_SERVER_URL = 'http://localhost:8856/recruit/admin';
+
 const API_OVERSEASSTUDY_SERVER_URL = 'https://www.yk0591.com/overseasstudy';
 const APP_NAME = 'JobPin';
 const APP_WEB_TITLE = 'JobPin后台管理系统';
 const APP_YEAR = '2020';
+
+
+
+
+//=======================
 
 const IMPORT_HISTORY_SCORE = API_SERVER_URL + '/data/excel/scoreFormula';
 const IMPORT_CULTURE_SCORE_RANK = API_SERVER_URL + '/data/excel/scoreRank/culture';

@@ -79,7 +79,7 @@ export default class GlobalHeader extends PureComponent {
           [
             (
               <Link to="/" className={styles.logo} key="logo">
-                <img src={require('../../assets/fujian_art_exam_logo.png')} alt="logo" width="32" />
+                <img src={require('../../assets/jobpin_logo_big.png')} alt="logo" width="32" />
               </Link>
             ),
             <Divider type="vertical" key="line" />,
@@ -135,7 +135,7 @@ export default class GlobalHeader extends PureComponent {
           {currentUser.name ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={require('../../assets/fujian_art_exam_logo.png')} />
+                <Avatar size="small" className={styles.avatar} src={require('../../assets/jobpin_logo_big.png')} />
                 <span className={styles.name}>{currentUser.name}</span>
               </span>
             </Dropdown>
