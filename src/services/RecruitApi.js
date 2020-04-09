@@ -27,6 +27,33 @@ export async function updateOrAddAbout(info, success, failed) {
 	}, success, failed);
 }
 
+//====反馈
+export async function listFeedback(info, success, failed) {
+	let url = AppUrl.API_SERVER_URL + '/feedBack/list';
+	return request2(url, {
+		method: 'POST',
+		body: JSON.stringify(info),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, success, failed);
+}
+
+export async function updateOrAddFeedback(info, success, failed) {
+	let url = AppUrl.API_SERVER_URL + '/feedBack/save';
+	return request2(url, {
+		method: 'POST',
+		body: JSON.stringify(info),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, success, failed);
+}
+
+
+
+
+
 //下面三个评论相关的都变成通用的
 export async function listComment(modal, id, param, s, f) {
 	let url = AppUrl.API_SERVER_URL + `/${modal}/comment/${id}/list`;

@@ -4,6 +4,9 @@ import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, 
 import Style from "./style.less";
 import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
+import * as RecruitApi from '../../services/RecruitApi';
+import {isEmpty} from "../../utils/utils";
+import EditView from "../Feedback/EditView";
 
 
 class FeedbackListView extends Component {
@@ -12,12 +15,34 @@ class FeedbackListView extends Component {
 
 		this.state = {
 			data: [],
-			loading: false
+			loading: false,
+			currIndex: 1,
+			isShowDialog: false,
+			info: {}
 		};
 	}
 
+	componentWillMount() {
+		this.refreshList();
+	}
+
+	refreshList() {
+		let info = {
+			pageIndex: this.state.currIndex,
+			pageSize: 10
+		};
+
+		RecruitApi.listFeedback(info, (resp)=> {
+			this.setState({
+				data: resp.data
+			});
+		}, (error)=> {
+			message.error('反馈数据获取失败: ' + JSON.stringify(error))
+		});
+	}
+
 	render() {
-		let {data, loading} = this.state;
+		let {data, loading, isShowDialog, info} = this.state;
 
 		const columns = [
 			{
@@ -36,7 +61,7 @@ class FeedbackListView extends Component {
 				align: 'center',
 				dataIndex: 'id',
 				render: (val, record) => (<div>
-						<Button onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
+						<Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
 
 						<Popconfirm title="是否要删除该关于？"
 						            onConfirm={() => {
@@ -53,11 +78,30 @@ class FeedbackListView extends Component {
 
 		return (
 			<div>
+				{isShowDialog &&
+				<Modal
+					style={{marginBottom: '30rem'}}
+					destroyOnClose="true"
+					width={820}
+					title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
+					onCancel={() => this.onDialogDismiss()}
+					visible={true}
+					footer={null}
+				>
+					<EditView
+						info={info}
+						onDialogDismiss={()=> this.onDialogDismiss(true)}
+					/>
+				</Modal>
+				}
 
 				<div className={Style.btnLayout}>
 					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-						this.refreshArticleList()
+						this.refreshList()
 					}}>刷新</Button>
+					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
+						this.onEdit(null)
+					}}>添加</Button>
 				</div>
 
 				<PaginationTable
@@ -73,7 +117,28 @@ class FeedbackListView extends Component {
 	}
 
 	onPageChange(page, pageSize) {
+		this.setState({
+			currIndex: page
+		}, ()=> {
+			this.refreshList();
+		});
+	}
 
+	onEdit(info) {
+		this.setState({
+			info: info,
+			isShowDialog: true,
+		});
+	}
+
+	onDialogDismiss(showRefresh= false) {
+		this.setState({
+			isShowDialog: false
+		}, () => {
+			if(showRefresh) {
+				this.refreshList();
+			}
+		})
 	}
 
 }
