@@ -3,27 +3,27 @@ import {connect} from 'dva';
 import {Table, Modal, Popconfirm, Divider, message, Button} from 'antd';
 import * as Data from '../../data/data';
 import Style from '../../css/common.less';
+import * as RecruitApi from '../../services/RecruitApi';
+import PaginationTable from "../../components/PaginationTable/PaginationTable";
 
-@connect(({banner}) => ({
-	banner,
-}))
 class BannerListView extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: [],
+			loading: false,
+			currIndex: 1,
+			isShowDialog: false,
+			info: {}
+		};
+	}
+
 
 	render() {
 		const {selectedRowKeys, onEditClick, onDelClick, onPageChange} = this.props;
+		let {data, loading, isShowDialog, info} = this.state;
 		const {list} = this.props;
 		const columns = [
-			{
-				title: '序号',
-				align: 'center',
-				render: (val, record, index) => (<text>{(list.current -1 ) * Data.PAGINATION_INFO.pageSize + index + 1}</text>)
-			},
-			{
-				title: '位置',
-				align: 'center',
-				dataIndex: 'locationId',
-				render: (val, record) => (<text>{Data.BANNER_LOCATION_TITLE[record.locationId]}</text>),
-			},
 			{
 				title: '图片',
 				align: 'center',
@@ -54,7 +54,8 @@ class BannerListView extends Component {
 				dataIndex: 'operate',
 				align: 'center',
 				render: (val, record) => (<div>
-						<Button className={Style.commonBtn} onClick={() => onEditClick(record)} type="normal" shape="circle" icon="edit"/>
+						<Button className={Style.commonBtn} onClick={() => onEditClick(record)} type="normal"
+						        shape="circle" icon="edit"/>
 
 						<Popconfirm title="是否要删除该广告？"
 						            onConfirm={() => {
@@ -70,77 +71,63 @@ class BannerListView extends Component {
 		];
 
 
-		const pagination = {
-			total: list.total,
-			defaultPageSize: list.size,
-			pageSize:list.size,
-			current: list.current
-		};
-
-		const paginationProps = {
-			showSizeChanger: true,
-			showQuickJumper: false,
-			...pagination,
-		};
-
-		const rowSelection = {
-			selectedRowKeys,
-			onChange: this.handleRowSelectChange,
-			getCheckboxProps: record => ({
-				disabled: record.disabled,
-			}),
-		};
-
 		return (
-			<Table
-				size="small"
-				// rowSelection={rowSelection}
-				dataSource={list.records}
-				pagination={paginationProps}
-				columns={columns}
-				onChange={onPageChange.bind(this)}
-			/>
+			<div>
+
+				<div className={Style.commonBtnLayout}>
+					<Button className={Style.commonBtn} type="primary" onClick={() => {
+						this.refreshList()
+					}}>刷新</Button>
+					<Button className={Style.commonBtn} type="primary" onClick={() => {
+						this.onAddClick()
+					}}>添加</Button>
+				</div>
+
+				<PaginationTable
+					dataSource={data}
+					loading={loading}
+					columns={columns}
+					onPageChange={(page, pageSize) => {
+						this.onPageChange(page, pageSize)
+					}}
+				/>
+			</div>
 		);
 	}
-
-	handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-		const totalCallNo = selectedRows.reduce((sum, val) => {
-			return sum + parseFloat(val.callNo, 10);
-		}, 0);
-
-		if (this.props.onSelectRow) {
-			this.props.onSelectRow(selectedRows);
-		}
-
-		this.setState({selectedRowKeys, totalCallNo});
-	};
 
 	onChange(type, value) {
 
 	}
 
-	handleSubmit(e) {
-		e.preventDefault();
-		const {getFieldProps, getFieldValue} = this.props.form;
-		this.props.form.validateFieldsAndScroll((err, values) => {
-			if (!err) {
-				this.updatePriceInfo();
-			} else {
-				console.log(' user input data is invalied ... ');
-			}
+	onPageChange(page, pageSize) {
+		this.setState({
+			currIndex: page
+		}, () => {
+			this.refreshList();
 		});
 	}
 
-	updatePriceInfo() {
-		message.info(" updatePriceInfo ")
+	refreshList() {
+		let info = {
+			pageIndex: this.state.currIndex,
+			pageSize: Data.PAGINATION_INFO.pageSize
+		};
+
+		RecruitApi.listBanner(info, (resp) => {
+			this.setState({
+				data: resp.data
+			});
+		}, (error) => {
+			message.error('获取Banner失败: ' + JSON.stringify(error));
+		});
 	}
 
 	getActionValueTip(banner) {
 		let type = banner.actionType;
 		let value = banner.actionValue;
-		if(Data.BANNER_ACTION_TYPE_SCENE === type) {
+		if (Data.BANNER_ACTION_TYPE_SCENE === type) {
 			return Data.BANNER_ACTION_TYPE_SCENE_TITLES.get(value);
-		} else if(Data.BANNER_ACTION_TYPE_ARTICLE === type){
+		} else if (Data.BANNER_ACTION_TYPE_ARTICLE === type) {
 			return `文章id:${value}`
 		} else {
 			return '--'

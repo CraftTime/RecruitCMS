@@ -45,7 +45,6 @@ class BannerView extends Component {
 
 
 	render() {
-		const {banner: {list}} = this.props;
 		const actionTitle = this.state.isEdit ? "编辑广告" : "新增广告";
 		const { dialogBanner } = this.state;
 
@@ -67,18 +66,7 @@ class BannerView extends Component {
 						/>
 					</Modal>
 					}
-
-					<div className={Style.commonBtnLayout}>
-						<Button className={Style.commonBtn} type="primary" onClick={() => {
-							this.refreshListView()
-						}}>刷新</Button>
-						<Button className={Style.commonBtn} type="primary" onClick={() => {
-							this.onAddClick()
-						}}>添加</Button>
-					</div>
-
 					<BannerListView
-						list={list}
 						onDelClick={(id)=> this.onDelClick(id)}
 						onEditClick={(banner) => this.onEditClick(banner)}
 						onPageChange={(page, pageSize)=> this.onPageChange(page, pageSize)}

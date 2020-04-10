@@ -70,6 +70,12 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = (app) => {
 	const routerConfig = {
+		'/banner': {
+			component: dynamicWrapper(app, [], () => import('../routes/Banner/BannerView'))
+		},
+		'/notification': {
+			component: dynamicWrapper(app, [], () => import('../routes/Notification/NotificationView'))
+		},
 		'/feedback': {
 			component: dynamicWrapper(app, [], () => import('../routes/Feedback/FeedbackView'))
 		},

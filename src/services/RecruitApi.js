@@ -174,6 +174,31 @@ export async function listSalary(info, success, failed) {
 	}, success, failed);
 }
 
+//通知
+export async function listNotification(info, success, failed) {
+	let url = AppUrl.API_SERVER_URL + '/notice/list';
+	return request2(url, {
+		method: 'POST',
+		body: JSON.stringify(info),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, success, failed);
+}
+
+//Banner
+export async function listBanner(info, success, failed) {
+	let url = AppUrl.API_SERVER_URL + '/banner/list';
+	return request2(url, {
+		method: 'POST',
+		body: JSON.stringify(info),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, success, failed);
+}
+
+//================================================================================================================================================================
 
 //下面三个评论相关的都变成通用的
 export async function listComment(modal, id, param, s, f) {
