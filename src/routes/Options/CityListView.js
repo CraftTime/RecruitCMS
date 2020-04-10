@@ -5,11 +5,12 @@ import Style from "./style.less";
 import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
+import EditView from './EditView';
+import ArticleEditView from "../Article/edit/ArticleEditView";
 import {isEmpty} from "../../utils/utils";
-import EditView from "../Feedback/EditView";
 
 
-class FeedbackListView extends Component {
+class CityListView extends Component {
 	constructor(props) {
 		super(props);
 
@@ -26,35 +27,14 @@ class FeedbackListView extends Component {
 		this.refreshList();
 	}
 
-	refreshList() {
-		let info = {
-			pageIndex: this.state.currIndex,
-			pageSize: Data.PAGINATION_INFO.pageSize
-		};
-
-		RecruitApi.listFeedback(info, (resp)=> {
-			this.setState({
-				data: resp.data
-			});
-		}, (error)=> {
-			message.error('反馈数据获取失败: ' + JSON.stringify(error))
-		});
-	}
 
 	render() {
 		let {data, loading, isShowDialog, info} = this.state;
-
 		const columns = [
 			{
-				title: '内容',
+				title: '城市',
 				align: 'center',
-				dataIndex: 'content'
-			},
-			{
-				title: '图片',
-				align: 'center',
-				dataIndex: 'image',
-				render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
+				dataIndex: 'cityName'
 			},
 			{
 				title: '操作',
@@ -78,22 +58,29 @@ class FeedbackListView extends Component {
 
 		return (
 			<div>
+
 				{isShowDialog &&
 				<Modal
 					style={{marginBottom: '30rem'}}
 					destroyOnClose="true"
-					width={820}
-					title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
-					onCancel={() => this.onDialogDismiss()}
+					title={isEmpty(info) ? '新增关于' : '编辑关于'}
+					onCancel={() => this.onDialogCancel()}
 					visible={true}
 					footer={null}
 				>
 					<EditView
 						info={info}
-						onDialogDismiss={()=> this.onDialogDismiss(true)}
+						onDialogDismiss={()=> {
+							this.setState({
+								isShowDialog: false
+							}, () => {
+								this.refreshList();
+							})
+						}}
 					/>
 				</Modal>
 				}
+
 
 				<div className={Style.btnLayout}>
 					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
@@ -124,6 +111,36 @@ class FeedbackListView extends Component {
 		});
 	}
 
+	refreshList() {
+		let info = {
+			pageIndex: this.state.currIndex,
+			pageSize: Data.PAGINATION_INFO.pageSize
+		};
+
+		RecruitApi.listCity(info, (resp)=> {
+			this.setState({
+				data: resp.data
+			});
+		}, (error)=> {
+			message.error('获取城市失败: ' + JSON.stringify(error));
+		});
+	}
+
+	onDelClick(id) {
+		RecruitApi.deleteAbout(id, (resp)=> {
+			message.success('删除城市成功');
+			this.refreshList();
+		}, (error)=> {
+
+		});
+	}
+
+	onDialogCancel() {
+		this.setState({
+			isShowDialog: false
+		})
+	}
+
 	onEdit(info) {
 		this.setState({
 			info: info,
@@ -131,16 +148,6 @@ class FeedbackListView extends Component {
 		});
 	}
 
-	onDialogDismiss(showRefresh= false) {
-		this.setState({
-			isShowDialog: false
-		}, () => {
-			if(showRefresh) {
-				this.refreshList();
-			}
-		})
-	}
-
 }
 
-export default FeedbackListView;
+export default CityListView;

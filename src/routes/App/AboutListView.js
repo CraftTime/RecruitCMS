@@ -17,6 +17,7 @@ class AboutListView extends Component {
 		this.state = {
 			data: [],
 			loading: false,
+			currIndex: 1,
 			isShowDialog: false,
 			info: {}
 		};
@@ -95,23 +96,34 @@ class AboutListView extends Component {
 					}}>添加</Button>
 				</div>
 
-				<Table
-					size="small"
-					bordered
+				<PaginationTable
 					dataSource={data}
 					loading={loading}
 					columns={columns}
+					onPageChange={(page, pageSize)=> {
+						this.onPageChange(page, pageSize)
+					}}
 				/>
 
 			</div>);
 	}
 
 	onPageChange(page, pageSize) {
-
+		this.setState({
+			currIndex: page
+		}, ()=> {
+			this.refreshList();
+		});
 	}
 
 	refreshList() {
-		RecruitApi.listAbout((resp)=> {
+		let info = {
+			pageIndex: this.state.currIndex,
+			pageSize: Data.PAGINATION_INFO.pageSize
+		};
+
+
+		RecruitApi.listAbout(info, (resp)=> {
 			this.setState({
 				data: resp.data
 			});

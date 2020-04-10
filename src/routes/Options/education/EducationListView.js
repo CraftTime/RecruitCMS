@@ -1,15 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
 import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
-import Style from "./style.less";
-import * as Data from '../../data/data';
-import PaginationTable from '../../components/PaginationTable/PaginationTable';
-import * as RecruitApi from '../../services/RecruitApi';
-import {isEmpty} from "../../utils/utils";
-import EditView from "../Feedback/EditView";
+import Style from "../style.less";
+import * as Data from '../../../data/data';
+import PaginationTable from '../../../components/PaginationTable/PaginationTable';
+import * as RecruitApi from '../../../services/RecruitApi';
+import EditView from './EditView';
+import {isEmpty} from "../../../utils/utils";
 
 
-class FeedbackListView extends Component {
+class EducationListView extends Component {
 	constructor(props) {
 		super(props);
 
@@ -26,35 +26,19 @@ class FeedbackListView extends Component {
 		this.refreshList();
 	}
 
-	refreshList() {
-		let info = {
-			pageIndex: this.state.currIndex,
-			pageSize: Data.PAGINATION_INFO.pageSize
-		};
-
-		RecruitApi.listFeedback(info, (resp)=> {
-			this.setState({
-				data: resp.data
-			});
-		}, (error)=> {
-			message.error('反馈数据获取失败: ' + JSON.stringify(error))
-		});
-	}
 
 	render() {
 		let {data, loading, isShowDialog, info} = this.state;
-
 		const columns = [
+			{
+				title: '待遇',
+				align: 'center',
+				dataIndex: 'treatmentName'
+			},
 			{
 				title: '内容',
 				align: 'center',
 				dataIndex: 'content'
-			},
-			{
-				title: '图片',
-				align: 'center',
-				dataIndex: 'image',
-				render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
 			},
 			{
 				title: '操作',
@@ -63,7 +47,7 @@ class FeedbackListView extends Component {
 				render: (val, record) => (<div>
 						<Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
 
-						<Popconfirm title="是否要删除该关于？"
+						<Popconfirm title="是否要删除该选项？"
 						            onConfirm={() => {
 							            this.onDelClick(record.id)
 						            }}
@@ -78,22 +62,29 @@ class FeedbackListView extends Component {
 
 		return (
 			<div>
+
 				{isShowDialog &&
 				<Modal
 					style={{marginBottom: '30rem'}}
 					destroyOnClose="true"
-					width={820}
-					title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
-					onCancel={() => this.onDialogDismiss()}
+					title={isEmpty(info) ? '新增年龄选项' : '编辑年龄选项'}
+					onCancel={() => this.onDialogCancel()}
 					visible={true}
 					footer={null}
 				>
 					<EditView
 						info={info}
-						onDialogDismiss={()=> this.onDialogDismiss(true)}
+						onDialogDismiss={()=> {
+							this.setState({
+								isShowDialog: false
+							}, () => {
+								this.refreshList();
+							})
+						}}
 					/>
 				</Modal>
 				}
+
 
 				<div className={Style.btnLayout}>
 					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
@@ -124,6 +115,36 @@ class FeedbackListView extends Component {
 		});
 	}
 
+	refreshList() {
+		let info = {
+			pageIndex: this.state.currIndex,
+			pageSize: Data.PAGINATION_INFO.pageSize
+		};
+
+		RecruitApi.listEducation(info, (resp)=> {
+			this.setState({
+				data: resp.data
+			});
+		}, (error)=> {
+			message.error('获取学历失败: ' + JSON.stringify(error));
+		});
+	}
+
+	onDelClick(id) {
+		RecruitApi.deleteAge(id, (resp)=> {
+			message.success('删除学历成功');
+			this.refreshList();
+		}, (error)=> {
+
+		});
+	}
+
+	onDialogCancel() {
+		this.setState({
+			isShowDialog: false
+		})
+	}
+
 	onEdit(info) {
 		this.setState({
 			info: info,
@@ -131,16 +152,6 @@ class FeedbackListView extends Component {
 		});
 	}
 
-	onDialogDismiss(showRefresh= false) {
-		this.setState({
-			isShowDialog: false
-		}, () => {
-			if(showRefresh) {
-				this.refreshList();
-			}
-		})
-	}
-
 }
 
-export default FeedbackListView;
+export default EducationListView;
