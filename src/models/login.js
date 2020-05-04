@@ -11,12 +11,15 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(login, payload.userName, payload.password);
+      const response = {};
+      // const response = yield call(login, payload.userName, payload.password);
       response.currentAuthority = 'user';
       response.type = payload.type;
       response.submitting = false;
-      response.statusCode = isSuccess(response) ? 200 : 0;
-      response.status = isSuccess(response);
+      // response.statusCode = isSuccess(response) ? 200 : 0;
+      // response.statusCode = isSuccess(response) ? 200 : 0;
+      response.statusCode = 200;
+      response.status = false;
       yield put({
         type: 'changeLoginStatus',
         payload: response,
