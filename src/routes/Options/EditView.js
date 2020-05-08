@@ -23,32 +23,14 @@ class EditView extends Component {
 				hideRequiredMark
 				style={{marginTop: 8}}
 			>
-				<FormItem
-					{...Data.FORM_ITEM_LAYOUT}
-					label="标题"
-					hasFeedback
-				>
-					{getFieldDecorator('title', {
-						initialValue: isEmpty(info) ? '' : info.title,
-						rules: [{
-							required: true, message: '请输入点击量',
-						}],
-					})(
-						<Input
-							style={{width: Data.FORM_ITEM_WIDTH}}
-							placeholder=""
-						/>
-					)}
-
-				</FormItem>
 
 				<FormItem
 					{...Data.FORM_ITEM_LAYOUT}
-					label="内容"
+					label="城市"
 					hasFeedback
 				>
-					{getFieldDecorator('content', {
-						initialValue: isEmpty(info) ? '' : info.content,
+					{getFieldDecorator('cityName', {
+						initialValue: isEmpty(info) ? '' : info.cityName,
 						rules: [{
 							required: true, message: '请输入点击量',
 						}],
@@ -77,12 +59,19 @@ class EditView extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
 				let info = {
-					id: this.isAdd() ? 0 : this.props.info.id,
+					// id: this.isAdd() ? 0 : this.props.info.id,
 					title: getFieldValue('title'),
-					content: getFieldValue('content'),
+					cityName: getFieldValue('cityName'),
+          state: 1,
+          pid:0,
 				};
+				if(!this.isAdd()) {
+         info.id= this.props.info.id;
+        }
 
-				RecruitApi.updateOrAddAbout(info, (resp)=> {
+
+				RecruitApi.updateOrAddCity(info, (resp)=> {
+
 					message.info(`${this.isAdd() ? '新增' : '编辑'}关于成功`);
 					this.props.onDialogDismiss();
 				}, (error)=> {

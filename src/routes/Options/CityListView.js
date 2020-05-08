@@ -30,11 +30,12 @@ class CityListView extends Component {
 
 	render() {
 		let {data, loading, isShowDialog, info} = this.state;
+		// alert(JSON.stringify(data));
 		const columns = [
 			{
 				title: '城市',
 				align: 'center',
-				dataIndex: 'cityName'
+				dataIndex: 'cityName',
 			},
 			{
 				title: '操作',
@@ -105,7 +106,7 @@ class CityListView extends Component {
 
 	onPageChange(page, pageSize) {
 		this.setState({
-			currIndex: page
+			currIndex: page,
 		}, ()=> {
 			this.refreshList();
 		});
@@ -119,15 +120,17 @@ class CityListView extends Component {
 
 		RecruitApi.listCity(info, (resp)=> {
 			this.setState({
-				data: resp.data
+				data: resp.data,
 			});
+			// alert(JSON.stringify(this.state.data))
 		}, (error)=> {
+
 			message.error('获取城市失败: ' + JSON.stringify(error));
 		});
 	}
 
 	onDelClick(id) {
-		RecruitApi.deleteAbout(id, (resp)=> {
+		RecruitApi.deleteCity(id, (resp)=> {
 			message.success('删除城市成功');
 			this.refreshList();
 		}, (error)=> {
@@ -142,10 +145,12 @@ class CityListView extends Component {
 	}
 
 	onEdit(info) {
+
 		this.setState({
 			info: info,
 			isShowDialog: true,
 		});
+
 	}
 
 }

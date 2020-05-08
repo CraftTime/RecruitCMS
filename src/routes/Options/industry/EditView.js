@@ -23,34 +23,16 @@ class EditView extends Component {
 				hideRequiredMark
 				style={{marginTop: 8}}
 			>
-				<FormItem
-					{...Data.FORM_ITEM_LAYOUT}
-					label="最小年龄"
-					hasFeedback
-				>
-					{getFieldDecorator('minAge', {
-						initialValue: isEmpty(info) ? '' : info.minAge,
-						rules: [{
-							required: true, message: '请输入最小年龄',
-						}],
-					})(
-						<Input
-							style={{width: Data.FORM_ITEM_WIDTH}}
-							placeholder=""
-						/>
-					)}
-
-				</FormItem>
 
 				<FormItem
 					{...Data.FORM_ITEM_LAYOUT}
-					label="最大年龄"
+					label="行业"
 					hasFeedback
 				>
-					{getFieldDecorator('maxAge', {
-						initialValue: isEmpty(info) ? '' : info.maxAge,
+					{getFieldDecorator('industryName', {
+						initialValue: isEmpty(info) ? '' : info.industryName,
 						rules: [{
-							required: true, message: '请输入最大年龄',
+							required: true, message: '请输入行业',
 						}],
 					})(
 						<Input
@@ -77,16 +59,19 @@ class EditView extends Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
 				let info = {
-					id: this.isAdd() ? -1 : this.props.info.id,
-					minAge: getFieldValue('minAge'),
-					maxAge: getFieldValue('maxAge'),
+					industryName: getFieldValue('industryName'),
+          state:1,
+          pid:0,
 				};
 
-				RecruitApi.updateOrAddAge(info, (resp)=> {
-					message.info(`${this.isAdd() ? '新增' : '编辑'}年龄选项成功`);
+        if(!this.isAdd()) {
+          info.id= this.props.info.id;
+        }
+				RecruitApi.updateOrAddIndustry(info, (resp)=> {
+					message.info(`${this.isAdd() ? '新增' : '编辑'}行业选项成功`);
 					this.props.onDialogDismiss();
 				}, (error)=> {
-					message.info(`${this.isAdd() ? '新增' : '编辑'}年龄选项失败: ${JSON.stringify(error)}`);
+					message.info(`${this.isAdd() ? '新增' : '编辑'}行业选项失败: ${JSON.stringify(error)}`);
 				});
 
 			}

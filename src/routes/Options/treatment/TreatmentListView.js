@@ -14,7 +14,7 @@ class TreatmentListView extends Component {
 		super(props);
 
 		this.state = {
-			data: [],
+			data: [{treatmentName:"20000/月" ,content:"底薪+抽成"},{content:"底薪+抽成"}],
 			loading: false,
 			currIndex: 1,
 			isShowDialog: false,

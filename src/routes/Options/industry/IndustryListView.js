@@ -33,7 +33,7 @@ class IndustryListView extends Component {
 			{
 				title: '行业',
 				align: 'center',
-				dataIndex: 'industryName'
+				dataIndex: 'industryName',
 			},
 			{
 				title: '操作',
@@ -62,7 +62,7 @@ class IndustryListView extends Component {
 				<Modal
 					style={{marginBottom: '30rem'}}
 					destroyOnClose="true"
-					title={isEmpty(info) ? '新增年龄选项' : '编辑年龄选项'}
+					title={isEmpty(info) ? '新增行业选项' : '编辑行业选项'}
 					onCancel={() => this.onDialogCancel()}
 					visible={true}
 					footer={null}
@@ -120,13 +120,15 @@ class IndustryListView extends Component {
 			this.setState({
 				data: resp.data
 			});
-		}, (error)=> {
+			// alert(JSON.stringify(resp.data))
+		},
+      (error)=> {
 			message.error('获取行业失败: ' + JSON.stringify(error));
 		});
 	}
 
 	onDelClick(id) {
-		RecruitApi.deleteAge(id, (resp)=> {
+		RecruitApi.deleteIndustry(id, (resp)=> {
 			message.success('删除行业成功');
 			this.refreshList();
 		}, (error)=> {
