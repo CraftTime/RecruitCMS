@@ -1,0 +1,105 @@
+
+@FormItemMarginLeft: 0.5rem;
+@FormItemHeight: 0.04rem;
+
+.singleLineEllipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.twoLineEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.imageSizeTip {
+  margin-left: 5px;
+  color: #0966ff;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexRowVCenter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bgCover {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.formItem {
+  margin-left: @FormItemMarginLeft;
+  height: @FormItemHeight;
+}
+
+.commonBtnLayout {
+  .flexRow;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.commonBtn {
+  margin-right: 0.5rem;
+
+}
+
+.listItemIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.unPaidStatus {
+  color: red;
+}
+
+.commentNumberLayout {
+  .flexRow;
+  justify-content: space-between;
+}
+
+.statusSuccess {
+  color: blue;
+}
+
+.statusFail {
+  color: red;
+}
+
+.searchInput {
+  align-self: flex-end;
+  width: 15rem;
+  margin-right: -1px;
+}
+
+.btnLayout {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+}
+
+.mainOperateBtn {
+  margin-right: 0.3rem;
+}

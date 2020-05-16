@@ -6,7 +6,7 @@ import * as Data from '../../../data/data';
 import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../../services/RecruitApi';
 import EditView from './EditView';
-import {isEmpty} from "../../../utils/utils";
+import {isEmpty} from '../../../utils/utils';
 
 
 class ScaleListView extends Component {
@@ -17,6 +17,7 @@ class ScaleListView extends Component {
 			data: [],
 			loading: false,
 			currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
 			isShowDialog: false,
 			info: {}
 		};
@@ -62,7 +63,7 @@ class ScaleListView extends Component {
 				<Modal
 					style={{marginBottom: '30rem'}}
 					destroyOnClose="true"
-					title={isEmpty(info) ? '新增年龄选项' : '编辑年龄选项'}
+					title={isEmpty(info) ? '新增规模选项' : '编辑规模选项'}
 					onCancel={() => this.onDialogCancel()}
 					visible={true}
 					footer={null}
@@ -104,7 +105,8 @@ class ScaleListView extends Component {
 
 	onPageChange(page, pageSize) {
 		this.setState({
-			currIndex: page
+			currIndex: page.current,
+      pageSize: page.pageSize
 		}, ()=> {
 			this.refreshList();
 		});
@@ -113,7 +115,7 @@ class ScaleListView extends Component {
 	refreshList() {
 		let info = {
 			pageIndex: this.state.currIndex,
-			pageSize: Data.PAGINATION_INFO.pageSize
+			pageSize: this.state.pageSize
 		};
 
 		RecruitApi.listCompanyScale(info, (resp)=> {
@@ -121,13 +123,13 @@ class ScaleListView extends Component {
 				data: resp.data
 			});
 		}, (error)=> {
-			message.error('获取学历失败: ' + JSON.stringify(error));
+			message.error('获取规模失败: ' + JSON.stringify(error));
 		});
 	}
 
 	onDelClick(id) {
-		RecruitApi.deleteAge(id, (resp)=> {
-			message.success('删除学历成功');
+		RecruitApi.deleteWorkScale(id, (resp)=> {
+			message.success('删除规模成功');
 			this.refreshList();
 		}, (error)=> {
 
