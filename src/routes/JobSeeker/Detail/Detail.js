@@ -1,15 +1,12 @@
-import React, {Component, Fragment} from 'react';
-import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
-import Style from "./style.less";
-import * as Data from '../../data/data';
-import PaginationTable from '../../components/PaginationTable/PaginationTable';
-import * as RecruitApi from '../../services/RecruitApi';
-import {isEmpty} from "../../utils/utils";
-import EditView from "../JobSeeker/EditView";
+import React, {Component} from 'react';
+import {Tabs, message, Form, DatePicker, Button, Input, Spin, Modal, Collapse, Table} from 'antd';
+import * as Data from '../../../data/data';
+import {isEmpty} from '../../../utils/utils';
+import * as RecruitApi from '../../../services/RecruitApi';
+import Style from '../style.less';
+import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 
-
-class JobSeekerListView extends Component {
+class Detail extends Component {
   constructor(props) {
     super(props);
 
@@ -17,8 +14,8 @@ class JobSeekerListView extends Component {
       data: [],
       loading: false,
       currIndex: 1,
-      isShowDialog: false,
-      info: {}
+      pageSize: Data.PAGINATION_INFO.pageSize,
+      info: {},
     };
   }
 
@@ -27,104 +24,84 @@ class JobSeekerListView extends Component {
   }
 
   refreshList() {
-    let info = {
-      pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
-    };
-
-    RecruitApi.JobSeekerViewList(info, (resp)=> {
+    let info = this.props.id;
+    RecruitApi.resumeDetailList(info, (resp)=> {
+      for(let i = 0; i < resp.data.length; i++) {
+        resp.data[i].birthDate = this.dateFunction(resp.data[i].birthDate);
+        resp.data[i].graduationDate = this.dateFunction(resp.data[i].graduationDate);
+      }
       this.setState({
-        data: resp.data
+        data: resp.data,
       });
+
     }, (error)=> {
       message.error('反馈数据获取失败: ' + JSON.stringify(error))
     });
   }
-
+  dateFunction(time){
+    var zoneDate = new Date(time).toJSON();
+    var date = new Date(+new Date(zoneDate)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'');
+    return date;
+  }
   render() {
-    let {data, loading, isShowDialog, info} = this.state;
-
+    let {data, loading, info} = this.state;
+    // const detailDate = { records: data };
+    // alert(JSON.stringify(detailDate))
     const columns = [
       {
-        title: '岗位名称',
+        title: '序号',
         align: 'center',
-        dataIndex: 'JobSeekerName'
+        render: (val, record, index) => (<text>{index+1}</text>)
       },
       {
-        title: '公司名称',
+        title: '姓名',
         align: 'center',
-        dataIndex: 'companyName'
+        dataIndex: 'realName',
       },
       {
-        title: '招聘者',
+        title: '期望岗位',
         align: 'center',
-        dataIndex: 'realName'
+        dataIndex: 'resumeName',
       },
-      {
-        title: '职位内容',
-        align: 'center',
-        dataIndex: 'JobSeekerContent',
-      },
-      {
-        title: '职位类型',
-        align: 'center',
-        dataIndex: 'positionTypeName',
-      },
-      {
-        title: '图片',
-        align: 'center',
-        dataIndex: 'image',
-        render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
-      },
-      {
-        title: '操作',
-        align: 'center',
-        dataIndex: 'id',
-        render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
 
-            <Popconfirm title="是否要删除该关于？"
-                        onConfirm={() => {
-                          this.onDelClick(record.id)
-                        }}
-                        okText="确定" cancelText="取消">
-              <Button type="normal" shape="circle" icon="delete"/>
-            </Popconfirm>
-
-          </div>
-        ),
+      {
+        title: ' 出生年月',
+        align: 'center',
+        dataIndex: 'birthDate',
+      },
+      {
+        title: ' 住址',
+        align: 'center',
+        dataIndex: 'address',
+      },
+      {
+        title: ' 毕业时间',
+        align: 'center',
+        dataIndex: 'graduationDate',
+      },
+      {
+        title: '最低薪资要求',
+        align: 'center',
+        dataIndex: 'minSalary',
+      },
+      {
+        title: '最高薪资要求',
+        align: 'center',
+        dataIndex: 'maxSalary',
       },
     ];
 
     return (
       <div>
-        {isShowDialog &&
-        <Modal
-          style={{marginBottom: '30rem'}}
-          destroyOnClose="true"
-          width={820}
-          title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
-          onCancel={() => this.onDialogDismiss()}
-          visible={true}
-          footer={null}
-        >
-          <EditView
-            info={info}
-            onDialogDismiss={()=> this.onDialogDismiss(true)}
-          />
-        </Modal>
-        }
-
         <div className={Style.btnLayout}>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
-          }}>刷新</Button>
-          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-            this.onEdit(null)
-          }}>添加</Button>
+          }}> 刷新 </Button>
         </div>
 
-        <PaginationTable
+        <Table
+          size="small"
+          bordered
           dataSource={data}
           loading={loading}
           columns={columns}
@@ -139,36 +116,12 @@ class JobSeekerListView extends Component {
   onPageChange(page, pageSize) {
     this.setState({
       currIndex: page.current,
+      pageSize: page.pageSize,
     }, ()=> {
       this.refreshList();
     });
   }
 
-  onEdit(info) {
-    this.setState({
-      info: info,
-      isShowDialog: true,
-    });
-  }
-
-  onDelClick(id) {
-    RecruitApi.deleteJobSeeker(id, (resp)=> {
-      message.success('删除反馈成功');
-      this.refreshList();
-    }, (error)=> {
-
-    });
-  }
-  onDialogDismiss(showRefresh= false) {
-    this.setState({
-      isShowDialog: false
-    }, () => {
-      if(showRefresh) {
-        this.refreshList();
-      }
-    })
-  }
-
 }
 
-export default JobSeekerListView;
+export default Detail;
