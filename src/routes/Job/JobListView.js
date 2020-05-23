@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
-import Style from "./style.less";
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal, Drawer} from 'antd';
+import Style from './style.less';
 import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
 import {isEmpty} from "../../utils/utils";
-import EditView from "../Job/EditView";
+import JobProfile from './DrawerView';
 
 class JobListView extends Component {
   constructor(props) {
@@ -16,8 +16,9 @@ class JobListView extends Component {
       data: [],
       loading: false,
       currIndex: 1,
-      isShowDialog: false,
-      info: {}
+      pageSize: Data.PAGINATION_INFO.pageSize,
+      isShowDrawer: false,
+      info: {},
     };
   }
 
@@ -28,20 +29,30 @@ class JobListView extends Component {
   refreshList() {
     let info = {
       pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
+      pageSize: this.state.pageSize,
     };
 
-    RecruitApi.JobViewList(info, (resp)=> {
+    RecruitApi.JobViewList(info, (resp) => {
+      for (let i = 0; i < resp.data.records.length; i++) {
+        if (resp.data.records[i].sex === 1) {
+          resp.data.records[i].sex = '男';
+        }
+        if (resp.data.records[i].sex === 2) {
+          resp.data.records[i].sex = '女';
+        } else {
+          resp.data.records[i].sex = '不限制';
+        }
+      }
       this.setState({
         data: resp.data
       });
-    }, (error)=> {
+    }, (error) => {
       message.error('反馈数据获取失败: ' + JSON.stringify(error))
     });
   }
 
   render() {
-    let {data, loading, isShowDialog, info} = this.state;
+    let {data, loading, isShowDrawer, info} = this.state;
 
     const columns = [
       {
@@ -70,64 +81,124 @@ class JobListView extends Component {
         dataIndex: 'positionTypeName',
       },
       {
-        title: '图片',
+        title: '工作地址',
         align: 'center',
-        dataIndex: 'image',
-        render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
+        dataIndex: 'workAddress',
+
       },
-      // {
-      //   title: '操作',
-      //   align: 'center',
-      //   dataIndex: 'id',
-      //   render: (val, record) => (<div>
-      //       <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
-      //
-      //       <Popconfirm title="是否要删除该关于？"
-      //                   onConfirm={() => {
-      //                     this.onDelClick(record.id)
-      //                   }}
-      //                   okText="确定" cancelText="取消">
-      //         <Button type="normal" shape="circle" icon="delete"/>
-      //       </Popconfirm>
-      //
-      //     </div>
-      //   ),
-      // },
+      {
+        title: '最低薪资',
+        align: 'center',
+        dataIndex: 'minSalary',
+
+      },
+      {
+        title: '最高薪资',
+        align: 'center',
+        dataIndex: 'maxSalary',
+
+      },
+      {
+        title: '行业类型',
+        align: 'center',
+        dataIndex: 'industryName',
+
+      },
+      {
+        title: '岗位类型',
+        align: 'center',
+        dataIndex: 'positionName',
+
+      },
+      {
+        title: '工作城市',
+        align: 'center',
+        dataIndex: 'cityName',
+
+      },
+      {
+        title: '学历要求',
+        align: 'center',
+        dataIndex: 'educationName',
+
+      },
+      {
+        title: '经验要求',
+        align: 'center',
+        dataIndex: 'workDateName',
+
+      },
+      {
+        title: '职业分类',
+        align: 'center',
+        dataIndex: 'positionTypeName',
+
+      },
+      {
+        title: '性别要求',
+        align: 'center',
+        dataIndex: 'sex',
+
+      },
+      {
+        title: '最小年龄',
+        align: 'center',
+        dataIndex: 'minAge',
+
+      },
+      {
+        title: '最大年龄',
+        align: 'center',
+        dataIndex: 'maxAge',
+
+      },
+      {
+        title: '查看详情',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn} onClick={() => this.drawer(record)} type="normal" shape="circle"
+                    icon="info"/>
+          </div>
+        ),
+      },
+
     ];
 
     return (
       <div>
-        {isShowDialog &&
-        <Modal
-          style={{marginBottom: '30rem'}}
-          destroyOnClose="true"
-          width={820}
-          title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
-          onCancel={() => this.onDialogDismiss()}
+        {isShowDrawer &&
+        <Drawer
+          width={1000}
+          title="岗位信息"
+          placement="right"
+          closable={true}
+          onClose={() => this.onDrawDismiss()}
           visible={true}
           footer={null}
         >
-          <EditView
-            info={info}
-            onDialogDismiss={()=> this.onDialogDismiss(true)}
+          <JobProfile realName={info.realName} companyName={info.companyName} id={info.id}
+                      JobSeekerId={info.JobSeekerId} cityName={info.cityName}
+                      workAddress={info.workAddress} jobName={info.jobName}
+                      jobContent={info.jobContent} positionTypeName={info.positionTypeName}
+                      industryName={info.industryName} positionName={info.positionName}
+                      educationName={info.educationName} workDateName={info.workDateName}
+                      sex={info.sex}
           />
-        </Modal>
+        </Drawer>
         }
-
         <div className={Style.btnLayout}>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
           }}>刷新</Button>
-          {/*<Button className={Style.mainOperateBtn} type="primary" onClick={() => {*/}
-          {/*  this.onEdit(null)*/}
-          {/*}}>添加</Button>*/}
+
         </div>
 
         <PaginationTable
           dataSource={data}
           loading={loading}
           columns={columns}
-          onPageChange={(page, pageSize)=> {
+          onPageChange={(page, pageSize) => {
             this.onPageChange(page, pageSize)
           }}
         />
@@ -138,36 +209,29 @@ class JobListView extends Component {
   onPageChange(page, pageSize) {
     this.setState({
       currIndex: page.current,
-    }, ()=> {
+      pageSize: page.pageSize,
+    }, () => {
       this.refreshList();
     });
   }
 
-  onEdit(info) {
+  drawer(info) {
     this.setState({
       info: info,
-      isShowDialog: true,
+      isShowDrawer: true,
     });
   }
 
-  onDelClick(id) {
-    RecruitApi.deleteJob(id, (resp)=> {
-      message.success('删除反馈成功');
-      this.refreshList();
-    }, (error)=> {
-
-    });
-  }
-  onDialogDismiss(showRefresh= false) {
+  onDrawDismiss(showRefresh = false) {
     this.setState({
-      isShowDialog: false
+      isShowDrawer: false
     }, () => {
-      if(showRefresh) {
+      if (showRefresh) {
         this.refreshList();
       }
     })
-  }
 
+  }
 }
 
 export default JobListView;
