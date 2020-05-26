@@ -1,15 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Tabs, Card, message, Form, DatePicker, Button, Input} from 'antd';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {getCustomerInfo, setCustomerInfo, getExamYear, getRemainingDays, setExamYear} from '../../services/AppApi';
-import * as Data from '../../data/data';
-import moment from 'moment';
-import Style from './style.less';
-import ShieldListView from './ShieldList/ShieldListView';
-import StarListView from './StarList/StarListView';
-import JobListView from './Job/JobListView';
-import CompanyListView from './CompanyInfo/Company';
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal,Tabs} from 'antd';
+import Style from "../style.less";
+import * as Data from '../../../data/data';
+import PaginationTable from '../../../components/PaginationTable/PaginationTable';
+import * as RecruitApi from '../../../services/RecruitApi';
+// import EditView from './EditView';
+import {isEmpty} from '../../../utils/utils';
+import WelfareListView from './welfare';
+import LicensesListView from './Licenses';
 
 const FormItem = Form.Item;
 
@@ -27,20 +26,20 @@ class OptionsView extends Component {
 
       <Tabs onChange={(key) => this.callback(key)} type="card">
 
-        <TabPane tab="所属公司" key="1">
-          <CompanyListView id={id} companyId={companyId}/>
+        <TabPane tab="公司福利" key="1">
+          <WelfareListView id={id} companyId={companyId}/>
         </TabPane>
 
-        <TabPane tab="岗位信息" key="4">
-          <JobListView id={id}/>
+        <TabPane tab="营业执照" key="4">
+          <LicensesListView id={id} companyId={companyId}/>
         </TabPane>
 
         <TabPane tab="收藏求职者" key="2">
-          <StarListView id={id}/>
+          {/*<StarListView id={id}/>*/}
         </TabPane>
 
         <TabPane tab="屏蔽求职者" key="3">
-          <ShieldListView id={id}/>
+          {/*<ShieldListView id={id}/>*/}
         </TabPane>
       </Tabs>
 

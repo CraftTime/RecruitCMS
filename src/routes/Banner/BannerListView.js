@@ -1,90 +1,78 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Table, Modal, Popconfirm, Divider, message, Button,Input,Upload, Icon, } from 'antd';
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
+import Style from "./style.less";
 import * as Data from '../../data/data';
-import Style from '../../css/common.less';
+import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
-import PaginationTable from "../../components/PaginationTable/PaginationTable";
+import {isEmpty} from "../../utils/utils";
+import EditView from "../Banner/EditView";
 
 
 class BannerListView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: [{
-        key: '1',
-        url: 'www.baidu.com',
 
-      },
-      ],
+    this.state = {
+      data: [],
       loading: false,
       currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
       isShowDialog: false,
-      info: {},
-      visible: false,
+      info: {}
     };
   }
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
 
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
+  componentWillMount() {
+    this.refreshList();
+  }
 
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
+  refreshList() {
+    let info = {
+      pageIndex: this.state.currIndex,
+      pageSize: this.state.pageSize,
+    };
+
+    RecruitApi.listBanner(info, (resp)=> {
+      this.setState({
+        data: resp.data
+      });
+    }, (error)=> {
+      message.error('反馈数据获取失败: ' + JSON.stringify(error))
     });
-  };
+  }
 
   render() {
-    const {selectedRowKeys, onEditClick, onDelClick, onPageChange} = this.props;
     let {data, loading, isShowDialog, info} = this.state;
-    const {list} = this.props;
+
     const columns = [
+      {
+        title: '内容',
+        align: 'center',
+        dataIndex: 'desc'
+      },
       {
         title: '图片',
         align: 'center',
-        dataIndex: 'url',
+        dataIndex: 'image',
         render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
       },
       {
-        title: '链接类型',
+        title: ' 跳转链接',
         align: 'center',
-        dataIndex: 'actionType',
-        render: (val, record) => (<text>{Data.BANNER_ACTION_TYPE_TITLE[record.actionType]}</text>),
-
-      },
-      {
-        title: '链接值',
-        align: 'center',
-        dataIndex: 'actionValue',
-        render: (val, record) => (<text>{this.getActionValueTip(record)}</text>),
-      },
-      {
-        title: '状态',
-        align: 'center',
-        dataIndex: 'visible',
-        render: (val, record) => (<text>{record.visible ? '启用' : '禁用'}</text>),
+        dataIndex: 'url',
+        width: 1000,
       },
       {
         title: '操作',
-        dataIndex: 'operate',
         align: 'center',
+        dataIndex: 'id',
         render: (val, record) => (<div>
-            <Button className={Style.commonBtn} onClick={() => onEditClick(record)} type="normal"
-                    shape="circle" icon="edit"/>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
 
             <Popconfirm title="是否要删除该广告？"
                         onConfirm={() => {
-                          onDelClick(record.id)
+                          this.onDelClick(record.id)
                         }}
                         okText="确定" cancelText="取消">
               <Button type="normal" shape="circle" icon="delete"/>
@@ -94,143 +82,81 @@ class BannerListView extends Component {
         ),
       },
     ];
+
     return (
       <div>
-        <div className={Style.commonBtnLayout}>
-          <Button className={Style.commonBtn} type="primary" onClick={() => {
+        {isShowDialog &&
+        <Modal
+          style={{marginBottom: '30rem'}}
+          destroyOnClose="true"
+          width={1200}
+          title={isEmpty(info) ? '新增广告' : '编辑广告'}
+          onCancel={() => this.onDialogDismiss()}
+          visible={true}
+          footer={null}
+        >
+          <EditView
+            info={info}
+            onDialogDismiss={()=> this.onDialogDismiss(true)}
+          />
+        </Modal>
+        }
+
+        <div className={Style.btnLayout}>
+          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
           }}>刷新</Button>
-          <Button className={Style.commonBtn} type="primary" onClick={() => {
-            this.showModal();
+          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
+            this.onEdit(null)
           }}>添加</Button>
         </div>
-        <Modal
-          title="添加广告"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-        <div style={{padding:30  }} >   广告图片： <Input  style={{ width: 200 }} type="text"/></div>
-         <div  style={{paddingLeft:60}}> <Avatar /></div>
-          电话： <Input type="text"/>
 
-          联系： <Input type="text"/>
-          <Input type="text"/>
-          <Input type="text"/>
-          <Input type="text"/>
-          <Input type="text"/>
-        </Modal>
         <PaginationTable
           dataSource={data}
           loading={loading}
           columns={columns}
-          onPageChange={(page, pageSize) => {
+          onPageChange={(page, pageSize)=> {
             this.onPageChange(page, pageSize)
           }}
         />
-      </div>
-    );
-  }
 
-  onChange(type, value) {
-
+      </div>);
   }
 
   onPageChange(page, pageSize) {
     this.setState({
-      currIndex: page
-    }, () => {
+      currIndex: page.current,
+      pageSize: page.pageSize,
+    }, ()=> {
       this.refreshList();
     });
   }
 
-  refreshList() {
-    let info = {
-      pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
-    };
-
-    RecruitApi.listBanner(info, (resp) => {
-      this.setState({
-        data: resp.data,
-      });
-    }, (error) => {
-      message.error('获取Banner失败: ' + JSON.stringify(error));
+  onEdit(info) {
+    this.setState({
+      info: info,
+      isShowDialog: true,
     });
   }
 
-  getActionValueTip(banner) {
-    let type = banner.actionType;
-    let value = banner.actionValue;
-    if (Data.BANNER_ACTION_TYPE_SCENE === type) {
-      return Data.BANNER_ACTION_TYPE_SCENE_TITLES.get(value);
-    } else if (Data.BANNER_ACTION_TYPE_ARTICLE === type) {
-      return `文章id:${value}`
-    } else {
-      return '--'
-    }
-  }
-}
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+  onDelClick(id) {
+    RecruitApi.deleteBanner(id, (resp)=> {
+      message.success('删除广告成功');
+      this.refreshList();
+    }, (error)=> {
 
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
+    });
   }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
+  onDialogDismiss(showRefresh= false) {
+    this.setState({
+      isShowDialog: false
+    }, () => {
+      if(showRefresh) {
+        this.refreshList();
+      }
+    })
   }
-  return isJpgOrPng && isLt2M;
+
 }
 
-class Avatar extends React.Component {
-  state = {
-    loading: false,
-  };
-
-  handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
-    }
-  };
-
-  render() {
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    const { imageUrl } = this.state;
-    return (
-      <Upload
-        name="avatar"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-        beforeUpload={beforeUpload}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-      </Upload>
-    );
-  }
-}
 export default BannerListView;

@@ -76,21 +76,20 @@ class EditView extends Component {
     const {getFieldProps, getFieldValue} = this.props.form;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-
         let info = {
-          key: this.props.count,
-          // id: this.isAdd() ? -1 : this.props.info.id,
           minSalary: getFieldValue('minSalary'),
           maxSalary: getFieldValue('maxSalary'),
         };
-        this.props.modifySucess(info);
+       if(!this.isAdd()){
+         info.id = this.props.info.id;
+       }
 
-        RecruitApi.updateOrAddAge(info, (resp) => {
-          message.info(`${this.isAdd() ? '新增' : '编辑'}年龄选项成功`);
+        RecruitApi.updateOrAddSalary(info, (resp) => {
+          message.info(`${this.isAdd() ? '新增' : '编辑'}薪资选项成功`);
           this.props.onDialogDismiss();
         }, (error) => {
           alert(JSON.stringify(error));
-          message.info(`${this.isAdd() ? '新增' : '编辑'}年龄选项失败: ${JSON.stringify(error)}`);
+          message.info(`${this.isAdd() ? '新增' : '编辑'}薪资选项失败: ${JSON.stringify(error)}`);
         });
 
       }

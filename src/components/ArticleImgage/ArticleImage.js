@@ -6,6 +6,7 @@ import * as IOApi from '../../services/AppApi';
 import * as AppInfo from '../../utils/AppInfo';
 import * as HTTPCode from '../../utils/HTTPCode';
 import {isEmpty} from '../../utils/utils';
+import * as RecruitApi from '../../services/RecruitApi';
 
 
 function getBase64(file) {
@@ -22,20 +23,21 @@ export default class ArticleImage extends Component {
   constructor(props) {
     super();
 
-    const url = props.url;
-    const fileList = isEmpty(url) ? [] : [
+    const url1 = props.url;
+    // alert(url1.length);
+    const fileList = isEmpty(url1) ? [] : [
       {
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: url,
+        url: url1,
       }
     ];
 
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: fileList
+      fileList : fileList,
     };
   }
 
@@ -50,9 +52,9 @@ export default class ArticleImage extends Component {
       }
     ];
 
-    this.setState({
-      fileList
-    });
+    // this.setState({
+    //   fileList
+    // });
   }
 
 
@@ -76,17 +78,22 @@ export default class ArticleImage extends Component {
     const that = this;
     const formData = new FormData();
     formData.append('image', fileList);
-    IOApi.importExcelFile(AppInfo.IMAGE_UPLOAD, formData).then(function (response) {
-      let code = response.meta.code;
-
-      if (HTTPCode.CODE_OK === code) {
-        console.info(' article image upload sucess : ' + JSON.stringify(response));
-        onUrlChange(response.response);
-      } else {
-        console.error(`image upload resultCode: ` + code + ", msg: " + response.response, 3);
-      }
-    }).catch(function (error) {
-
+    // IOApi.importExcelFile(AppInfo.IMAGE_UPLOAD, formData).then(function (response) {
+    //   let code = response.meta.code;
+    //
+    //   if (HTTPCode.CODE_OK === code) {
+    //     console.info(' article image upload sucess : ' + JSON.stringify(response));
+    //     onUrlChange(response.response);
+    //   } else {
+    //     console.error(`image upload resultCode: ` + code + ", msg: " + response.response, 3);
+    //   }
+    // }).catch(function (error) {
+    //
+    // });
+    RecruitApi.Imgupload(formData,(resp) => {
+      onUrlChange(resp.data);
+    }, (error) => {
+      message.error('反馈数据获取失败: ' + JSON.stringify(error))
     });
   }
 
@@ -102,7 +109,7 @@ export default class ArticleImage extends Component {
 
       },
       beforeUpload: file => {
-	      console.log(' bingo image: ' + this.state.fileList)
+	      // console.log(' bingo image: ' + this.state.fileList)
         this.setState({
           fileList: file,
         }, function () {

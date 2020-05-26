@@ -6,7 +6,7 @@ import * as Data from '../../../data/data';
 import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../../services/RecruitApi';
 import EditView from './EditView';
-import {isEmpty} from "../../../utils/utils";
+import {isEmpty} from '../../../utils/utils';
 
 
 class TreatmentListView extends Component {
@@ -14,9 +14,10 @@ class TreatmentListView extends Component {
 		super(props);
 
 		this.state = {
-			data: [{treatmentName:"20000/月" ,content:"底薪+抽成"},{content:"底薪+抽成"}],
+			data: [],
 			loading: false,
 			currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
 			isShowDialog: false,
 			info: {}
 		};
@@ -109,7 +110,8 @@ class TreatmentListView extends Component {
 
 	onPageChange(page, pageSize) {
 		this.setState({
-			currIndex: page
+			currIndex: page.current,
+      pageSize: page.pageSize
 		}, ()=> {
 			this.refreshList();
 		});
@@ -118,7 +120,7 @@ class TreatmentListView extends Component {
 	refreshList() {
 		let info = {
 			pageIndex: this.state.currIndex,
-			pageSize: Data.PAGINATION_INFO.pageSize
+			pageSize: this.state.pageSize
 		};
 
 		RecruitApi.listTreatment(info, (resp)=> {
@@ -126,12 +128,12 @@ class TreatmentListView extends Component {
 				data: resp.data
 			});
 		}, (error)=> {
-			message.error('获取待遇失败: ' + JSON.stringify(error));
+			message.error('获取待遇失败:' + JSON.stringify(error));
 		});
 	}
 
 	onDelClick(id) {
-		RecruitApi.deleteAge(id, (resp)=> {
+		RecruitApi.deleteTreatment(id, (resp)=> {
 			message.success('删除待遇成功');
 			this.refreshList();
 		}, (error)=> {

@@ -33,11 +33,11 @@ const menuData = [
     path: 'teach',
   },
 
-  {
-    name: '简历管理',
-    icon: 'message',
-    path: 'resume',
-  },
+  // {
+  //   name: '简历管理',
+  //   icon: 'message',
+  //   path: 'resume',
+  // },
   {
     name: '面试管理',
     icon: 'shopping',

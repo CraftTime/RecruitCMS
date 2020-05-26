@@ -33,7 +33,7 @@ export async function updateOrAddAbout(info, success, failed) {
 //==============================================================================================================================================
 // //反馈
 export async function listFeedback(info, success, failed) {
-  let url = AppUrl.API_SERVER_URL + '/feedBack/list';
+  let url = AppUrl.API_SERVER_URL + '/feedback/list';
   return request2(url, {
     method: 'POST',
     body: JSON.stringify(info),
@@ -43,7 +43,7 @@ export async function listFeedback(info, success, failed) {
   }, success, failed);
 }
 export async function updateOrAddFeedback(info, success, failed) {
-  let url = AppUrl.API_SERVER_URL + '/feedBack/save';
+  let url = AppUrl.API_SERVER_URL + '/feedback/save';
   return request2(url, {
     method: 'POST',
     body: JSON.stringify(info),
@@ -53,7 +53,7 @@ export async function updateOrAddFeedback(info, success, failed) {
   }, success, failed);
 }
 export async function deleteFeedback(id, s, f) {
-  let url = AppUrl.API_SERVER_URL + `/feedBack/delete/${id}`;
+  let url = AppUrl.API_SERVER_URL + `/feedback/delete/${id}`;
   return request2(url, {
     method: 'DELETE',
   }, s, f);
@@ -339,11 +339,33 @@ export async function deleteManagement(id, s, f) {
     method: 'DELETE',
   }, s, f);
 }
-
-
-
-
-
+//求职状态
+export async function listJobState(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobState/list';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+export async function updateOrAddJobState(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobState/save';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+export async function deleteJobState(id, s, f) {
+  let url = AppUrl.API_SERVER_URL + `/jobState/delete/${id}`;
+  return request2(url, {
+    method: 'DELETE',
+  }, s, f);
+}
 
 
 
@@ -426,6 +448,7 @@ export async function deleteComment(modal, param, s, f) {
 }
 //======================================================================================================================
 //求职者接口
+//基本信息
 export async function infoList(info, success, failed) {
   let url = AppUrl.API_SERVER_URL + '/jobSeeker/infoList';
   return request2(url, {
@@ -436,7 +459,82 @@ export async function infoList(info, success, failed) {
     }
   }, success, failed);
 }
-
+//岗位收藏
+export async function jobStarList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/jobStarList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//公司收藏
+export async function CompanyStarList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/companyStarList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//公司屏蔽
+export async function ShieldList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/shieldCompanyList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+// 工作经历
+export async function WorkExpList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/workExpList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//教育经历
+export async function EducationExpList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/educationExpList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//项目经历
+export async function ProjectExpList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/projectExpList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//求职期望
+export async function JobExpectList(JobSeekerId, success, failed) {
+  let url = AppUrl.API_SERVER_URL + `/jobSeeker/JobIntention/${JobSeekerId}`;
+  return request2(url, {
+    method: 'Get',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
 //=====================================================================================================================
 //招聘者接口
 export async function recruiter(info, success, failed) {
@@ -444,6 +542,49 @@ export async function recruiter(info, success, failed) {
   return request2(url, {
     method: 'POST',
     body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//屏蔽用户
+export async function ShieldUserList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/recruiter/shieldList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//收藏用户
+export async function StarUserList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/recruiter/starList';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+// 发布的岗位信息
+export async function JobUserList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/recruiter/job/list';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//招聘者所属公司信息
+export async function CompanyUserList(Id, success, failed) {
+  let url = AppUrl.API_SERVER_URL + `/recruiter/company/${Id}`;
+  return request2(url, {
+    method: 'Get',
     headers: {
       "Content-Type": "application/json"
     }
@@ -461,6 +602,22 @@ export async function companyList(info, success, failed) {
     }
   }, success, failed);
 }
+export async function updateOrAddCompany(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/company/save';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+export async function deleteCompany(id, s, f) {
+  let url = AppUrl.API_SERVER_URL + `/company/delete/${id}`;
+  return request2(url, {
+    method: 'DELETE',
+  }, s, f);
+}
 //======================================================================================================================
 //简历信息
 export async function resumeList(info, success, failed) {
@@ -473,10 +630,19 @@ export async function resumeList(info, success, failed) {
     }
   }, success, failed);
 }
+export async function resumeDetailList(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + `/jobSeeker/resume/${info}`;
+  return request2(url, {
+    method: 'Get',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
 //======================================================================================================================
 //面试信息接口
 export async function InterviewList(info, success, failed) {
-  let url = AppUrl.API_SERVER_URL + '/resume/list';
+  let url = AppUrl.API_SERVER_URL + '/interview/list';
   return request2(url, {
     method: 'POST',
     body: JSON.stringify(info),
@@ -497,12 +663,64 @@ export async function JobViewList(info, success, failed) {
     }
   }, success, failed);
 }
+//岗位面试信息
+export async function JobInterview(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/job/interview';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//岗位状态信息
+export async function JobEmploy(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + `/job/employ/${info}`;
+  return request2(url, {
+    method: 'Get',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//岗位申请记录
+export async function JobApply(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/job/apply';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
 //=====================================================================================================================
 //图片上传接口
 export async function Imgupload(info, success, failed) {
   let url = AppUrl.API_SERVER_URL + '/image/upload';
   return request2(url, {
     method: 'POST',
+    body: info,
+  }, success, failed);
+}
+//=====================================================================================================================
+//首页接口
+//招聘信息
+export async function HomeInfo(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/index/info';
+  return request2(url, {
+    method: 'Get',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+//用户权限
+export async function RootInfo(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/userRole/list';
+  return request2(url, {
+    method: 'Post',
     body: JSON.stringify(info),
     headers: {
       "Content-Type": "application/json"

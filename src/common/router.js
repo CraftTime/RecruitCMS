@@ -70,8 +70,23 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = (app) => {
   const routerConfig = {
+    '/home': {
+      component: dynamicWrapper(app, [], () => import('../routes/Home/HomeView'))
+    },
+    '/teach': {
+      component: dynamicWrapper(app, [], () => import('../routes/Job/JobView'))
+    },
+    '/interview': {
+      component: dynamicWrapper(app, [], () => import('../routes/Interview/Interview'))
+    },
+    '/resume': {
+      component: dynamicWrapper(app, [], () => import('../routes/Resume/ResumeView'))
+    },
+    '/company': {
+      component: dynamicWrapper(app, [], () => import('../routes/Company/CompanyView'))
+    },
     '/job-seeker': {
-      component: dynamicWrapper(app, [], () => import('../routes/JobSeeker/JobSeekerView'))
+      component: dynamicWrapper(app, [], () => import('../routes/JobSeeker/JobSeekerListView'))
     },
     '/recruiter': {
       component: dynamicWrapper(app, [], () => import('../routes/Recruiter/RecruiterView'))

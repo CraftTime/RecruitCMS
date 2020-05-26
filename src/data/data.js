@@ -311,7 +311,7 @@ const BANNER_EMPTY =
 	};
 
 const PAGINATION_INFO = {
-	pageSize: 10,
+  pageSize: 10,
 };
 
 const PRODUCT_TYPE_CULTURE = 1;

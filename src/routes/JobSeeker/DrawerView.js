@@ -33,10 +33,30 @@ export default class BasicProfile extends Component {
       type: 'profile/fetchBasic',
     });
   }
-  dateFunction(time){
-    var zoneDate = new Date(time).toJSON();
-    var date = new Date(+new Date(zoneDate)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'');
-    return date;
+
+  dateFormat(fmt, date) {
+    let ret;
+    const opt = {
+      "Y+": date.getFullYear().toString(),        // 年
+      "m+": (date.getMonth() + 1).toString(),     // 月
+      "d+": date.getDate().toString(),            // 日
+      "H+": date.getHours().toString(),           // 时
+      "M+": date.getMinutes().toString(),         // 分
+      "S+": date.getSeconds().toString(),          // 秒
+      // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    };
+    for (let k in opt) {
+      ret = new RegExp("(" + k + ")").exec(fmt);
+      if (ret) {
+        fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+      };
+    };
+    return fmt;
+  }
+
+  dateFunction(time) {
+    var date = new Date(time);
+    return this.dateFormat("YYYY-mm-dd",date);
   }
   refreshList() {
     let id = this.props.id;
@@ -127,8 +147,8 @@ export default class BasicProfile extends Component {
         align: 'center',
         dataIndex: 'endDate',
       },
-    ]
-    const ProjectColumns = [
+    ];
+    const projectColumns = [
       {
         title: '项目职位',
         align: 'center',
@@ -155,7 +175,7 @@ export default class BasicProfile extends Component {
         align: 'center',
         dataIndex: 'endDate',
       },
-      ]
+      ];
     return (
         <Card bordered={false}>
           <div style={{ display: 'flex' }}>
@@ -166,7 +186,8 @@ export default class BasicProfile extends Component {
             <Description term="毕业时间">{data[0].graduationDate}</Description>
             <Description term="最低薪资要求">{data[0].minSalary}</Description>
             <Description term="最高薪资要求">{data[0].maxSalary}</Description>
-            <Description term="住址" layout="vertical">{data[0].address}</Description>
+            <Description term="住址" layout="vertical" style={ {width:400} } >{data[0].address}</Description>
+            <Description term="个人主页" layout="vertical">{data[0].socialHomepage}</Description>
           </DescriptionList>
           <div style={{ marginTop: 32 }}><Avatar src={avatar} size={100} /></div>
             </div >
@@ -195,7 +216,7 @@ export default class BasicProfile extends Component {
             pagination={false}
             loading={loading}
             dataSource={projectData}
-            columns={ProjectColumns}
+            columns={projectColumns}
           />
         </Card>
 

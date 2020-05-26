@@ -6,152 +6,153 @@ import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
 import EditView from './EditView';
-import ArticleEditView from "../Article/edit/ArticleEditView";
-import {isEmpty} from "../../utils/utils";
+import {isEmpty} from '../../utils/utils';
 
 
 class CityListView extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      loading: false,
+      currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
+      isShowDialog: false,
+      info: {}
+    };
+  }
 
-		this.state = {
-			data: [],
-			loading: false,
-			currIndex: 1,
-			isShowDialog: false,
-			info: {}
-		};
-	}
-
-	componentWillMount() {
-		this.refreshList();
-	}
-
-
-	render() {
-		let {data, loading, isShowDialog, info} = this.state;
-		// alert(JSON.stringify(data));
-		const columns = [
-			{
-				title: '城市',
-				align: 'center',
-				dataIndex: 'cityName',
-			},
-			{
-				title: '操作',
-				align: 'center',
-				dataIndex: 'id',
-				render: (val, record) => (<div>
-						<Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="edit"/>
-
-						<Popconfirm title="是否要删除该关于？"
-						            onConfirm={() => {
-							            this.onDelClick(record.id)
-						            }}
-						            okText="确定" cancelText="取消">
-							<Button type="normal" shape="circle" icon="delete"/>
-						</Popconfirm>
-
-					</div>
-				),
-			},
-		];
-
-		return (
-			<div>
-
-				{isShowDialog &&
-				<Modal
-					style={{marginBottom: '30rem'}}
-					destroyOnClose="true"
-					title={isEmpty(info) ? '新增关于' : '编辑关于'}
-					onCancel={() => this.onDialogCancel()}
-					visible={true}
-					footer={null}
-				>
-					<EditView
-						info={info}
-						onDialogDismiss={()=> {
-							this.setState({
-								isShowDialog: false
-							}, () => {
-								this.refreshList();
-							})
-						}}
-					/>
-				</Modal>
-				}
+  componentWillMount() {
+    this.refreshList();
+  }
 
 
-				<div className={Style.btnLayout}>
-					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-						this.refreshList()
-					}}>刷新</Button>
-					<Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-						this.onEdit(null)
-					}}>添加</Button>
-				</div>
+  render() {
+    let {data, loading, isShowDialog, info} = this.state;
+    // alert(JSON.stringify(data));
+    const columns = [
+      {
+        title: '城市名称',
+        align: 'center',
+        dataIndex: 'cityName',
+      },
+      {
+        title: '操作',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn} onClick={() => this.onEdit(record)} type="normal" shape="circle"
+                    icon="edit"/>
 
-				<PaginationTable
-					dataSource={data}
-					loading={loading}
-					columns={columns}
-					onPageChange={(page, pageSize)=> {
-						this.onPageChange(page, pageSize)
-					}}
-				/>
+            <Popconfirm title="是否要删除该城市？"
+                        onConfirm={() => {
+                          this.onDelClick(record.id)
+                        }}
+                        okText="确定" cancelText="取消">
+              <Button type="normal" shape="circle" icon="delete"/>
+            </Popconfirm>
 
-			</div>);
-	}
+          </div>
+        ),
+      },
+    ];
 
-	onPageChange(page, pageSize) {
-		this.setState({
-			currIndex: page,
-		}, ()=> {
-			this.refreshList();
-		});
-	}
+    return (
+      <div>
 
-	refreshList() {
-		let info = {
-			pageIndex: this.state.currIndex,
-			pageSize: Data.PAGINATION_INFO.pageSize
-		};
+        {isShowDialog &&
+        <Modal
+          style={{marginBottom: '30rem'}}
+          destroyOnClose="true"
+          title={isEmpty(info) ? '新增城市' : '编辑城市'}
+          onCancel={() => this.onDialogCancel()}
+          visible={true}
+          footer={null}
+        >
+          <EditView
+            info={info}
+            onDialogDismiss={() => {
+              this.setState({
+                isShowDialog: false
+              }, () => {
+                this.refreshList();
+              })
+            }}
+          />
+        </Modal>
+        }
 
-		RecruitApi.listCity(info, (resp)=> {
-			this.setState({
-				data: resp.data,
-			});
-			// alert(JSON.stringify(this.state.data))
-		}, (error)=> {
 
-			message.error('获取城市失败: ' + JSON.stringify(error));
-		});
-	}
+        <div className={Style.btnLayout}>
+          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
+            this.refreshList()
+          }}>刷新</Button>
+          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
+            this.onEdit(null)
+          }}>添加</Button>
+        </div>
 
-	onDelClick(id) {
-		RecruitApi.deleteCity(id, (resp)=> {
-			message.success('删除城市成功');
-			this.refreshList();
-		}, (error)=> {
+        <PaginationTable
+          dataSource={data}
+          loading={loading}
+          columns={columns}
+          onPageChange={(page, pageSize) => {
+            this.onPageChange(page, pageSize)
+          }}
+        />
 
-		});
-	}
+      </div>);
+  }
 
-	onDialogCancel() {
-		this.setState({
-			isShowDialog: false
-		})
-	}
+  onPageChange(page, pageSize) {
+    this.setState({
+      currIndex: page.current,
+      pageSize: page.pageSize,
+    }, () => {
+      this.refreshList();
+    });
+  }
 
-	onEdit(info) {
+  refreshList() {
+    let info = {
+      pageIndex: this.state.currIndex,
+      pageSize: this.state.pageSize
+    };
 
-		this.setState({
-			info: info,
-			isShowDialog: true,
-		});
+    RecruitApi.listCity(info, (resp) => {
+      this.setState({
+        data: resp.data,
+      });
+      // alert(JSON.stringify(this.state.data))
+    }, (error) => {
 
-	}
+      message.error('获取城市失败: ' + JSON.stringify(error));
+    });
+  }
+
+  onDelClick(id) {
+    RecruitApi.deleteCity(id, (resp) => {
+      message.success('删除城市成功');
+      this.refreshList();
+    }, (error) => {
+
+    });
+  }
+
+  onDialogCancel() {
+    this.setState({
+      isShowDialog: false
+    })
+  }
+
+  onEdit(info) {
+
+    this.setState({
+      info: info,
+      isShowDialog: true,
+    });
+
+  }
 
 }
 

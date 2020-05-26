@@ -4,14 +4,14 @@ import {Tabs, Card, message, Form, DatePicker, Button, Input} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import * as Data from '../../data/data';
 import moment from 'moment';
-import BannerListView from './BannerListView';
+import ResumeListView from './ResumeListView';
 import Style from './style.less';
 
 const FormItem = Form.Item;
 
 const {TabPane} = Tabs;
 
-class BannerView extends Component {
+class ResumeView extends Component {
 
   componentDidMount() {
   }
@@ -20,11 +20,11 @@ class BannerView extends Component {
     return (
       <PageHeaderLayout title="反馈信息" content="">
         <Card bordered={false}>
-          <BannerListView/>
+          <ResumeListView/>
         </Card>
       </PageHeaderLayout>
     );
   }
 }
 
-export default BannerView;
+export default ResumeView;

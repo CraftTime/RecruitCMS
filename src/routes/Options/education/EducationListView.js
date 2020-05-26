@@ -17,6 +17,7 @@ class EducationListView extends Component {
       data: [],
       loading: false,
       currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
       isShowDialog: false,
       info: {},
     };
@@ -106,7 +107,8 @@ class EducationListView extends Component {
 
   onPageChange(page, pageSize) {
     this.setState({
-      currIndex: page
+      currIndex: page.current,
+      pageSize:page.pageSize
     }, () => {
       this.refreshList();
     });
@@ -115,7 +117,7 @@ class EducationListView extends Component {
   refreshList() {
     let info = {
       pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
+      pageSize: this.state.pageSize
     };
 
     RecruitApi.listEducation(info, (resp) => {

@@ -1,6 +1,6 @@
 // Use require.context to require reducers automatically
 // Ref: https://webpack.github.io/docs/context.html
-const context = require.context('./', false, /\.js$/);
+const context = require.context('./', false, /\EditView.js$/);
 const keys = context.keys().filter(item => item !== './index.js');
 
 const models = [];

@@ -31,15 +31,11 @@ class ShieldListView extends Component {
     // alert(JSON.stringify(data));
     const columns = [
       {
-        title: '姓名',
+        title: '屏蔽用户',
         align: 'center',
-        dataIndex: 'realName',
+        dataIndex: 'jobSeekerName',
       },
-      {
-        title: '屏蔽公司',
-        align: 'center',
-        dataIndex: 'companyName',
-      },
+
       {
         title: '操作',
         align: 'center',
@@ -118,11 +114,12 @@ class ShieldListView extends Component {
 
   refreshList() {
     let info = {
+      recruiterId: this.props.id,
       pageIndex: this.state.currIndex,
       pageSize: Data.PAGINATION_INFO.pageSize
     };
 
-    RecruitApi.ShieldList(info, (resp) => {
+    RecruitApi.ShieldUserList(info, (resp) => {
       this.setState({
         data: resp.data,
       });

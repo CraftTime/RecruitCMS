@@ -3,88 +3,116 @@ import {Tabs, message, Form, DatePicker, Button, Input, Spin, Modal, Collapse} f
 import * as Data from '../../data/data';
 import {isEmpty} from '../../utils/utils';
 import * as RecruitApi from '../../services/RecruitApi';
+import Style from "./style.less";
+import PaginationTable from "../../components/PaginationTable/PaginationTable";
 
 const FormItem = Form.Item;
 
 @Form.create()
-class EditView extends Component {
+class Detail extends Component {
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
-
+    this.state = {
+      data: [],
+      loading: false,
+      currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
+      info: {},
+    };
   }
 
-  render() {
-    let {info} = this.props;
-    const {getFieldDecorator, getFieldValue} = this.props.form;
-
-    return (
-      <Form
-        onSubmit={e => this.handleSubmit(e)}
-        hideRequiredMark
-        style={{marginTop: 8}}
-      >
-
-        <FormItem
-          {...Data.FORM_ITEM_LAYOUT}
-          label="姓名"
-          hasFeedback
-        >
-          {getFieldDecorator('realName', {
-            initialValue: isEmpty(info) ? '' : info.realName,
-            rules: [{
-              required: true, message: '请输入求职者姓名',
-            }],
-          })(
-            <Input
-              style={{width: Data.FORM_ITEM_WIDTH}}
-              placeholder=""
-            />
-          )}
-
-        </FormItem>
-
-        <FormItem {...Data.SUBMIT_FORM_LAYOUT} style={{marginTop: 32}}>
-          <Button type="primary" htmlType="submit">
-            {isEmpty(info) ? '新增' : '修改'}
-          </Button>
-        </FormItem>
-
-      </Form>
-    );
+  componentWillMount() {
+    this.refreshList();
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const {getFieldProps, getFieldValue} = this.props.form;
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        let info = {
-          // id: this.isAdd() ? 0 : this.props.info.id,
-          title: getFieldValue('title'),
-          realName: getFieldValue('realName'),
-          state: 1,
-        };
-        if(!this.isAdd()) {
-          info.id= this.props.info.id;
-        }
-
-
-        RecruitApi.updateOrAddCity(info, (resp)=> {
-
-          message.info(`${this.isAdd() ? '新增' : '编辑'}关于成功`);
-          this.props.onDialogDismiss();
-        }, (error)=> {
-          message.info(`${this.isAdd() ? '新增' : '编辑'}关于失败: ${JSON.stringify(error)}`);
-        });
-
-      }
+  refreshList() {
+    let info = this.props.id;
+alert(info)
+    RecruitApi.resumeDetailList(info, (resp)=> {
+      this.setState({
+        data: resp.data,
+      });
+    }, (error)=> {
+      message.error('反馈数据获取失败: ' + JSON.stringify(error))
     });
   }
 
-  isAdd() {
-    return isEmpty(this.props.info);
+  render() {
+    let {data, loading, info} = this.state;
+
+    const columns = [
+      {
+        title: '姓名',
+        align: 'center',
+        dataIndex: 'realName',
+      },
+      {
+        title: '期望岗位',
+        align: 'center',
+        dataIndex: 'resumeName',
+      },
+      {
+        title: ' 头像',
+        align: 'center',
+        dataIndex: 'avatar',
+        render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
+      },
+      {
+        title: ' 工作经验',
+        align: 'center',
+        dataIndex: 'workDateName',
+      },
+      {
+        title: ' 学历',
+        align: 'center',
+        dataIndex: 'educationName',
+      },
+      {
+        title: '最低薪资要求',
+        align: 'center',
+        dataIndex: 'minSalary',
+      },
+      {
+        title: '查看详情',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
+      },
+    ];
+
+    return (
+      <div>
+        <div className={Style.btnLayout}>
+          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
+            this.refreshList()
+          }}> 刷新 </Button>
+        </div>
+
+        <PaginationTable
+          dataSource={data}
+          loading={loading}
+          columns={columns}
+          onPageChange={(page, pageSize)=> {
+            this.onPageChange(page, pageSize)
+          }}
+        />
+
+      </div>);
+  }
+
+  onPageChange(page, pageSize) {
+    this.setState({
+      currIndex: page.current,
+      pageSize: page.pageSize,
+    }, ()=> {
+      this.refreshList();
+    });
   }
 
 }
 
-export default EditView;
+export default Detail;

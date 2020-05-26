@@ -1,12 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
+import {Icon, Form, Input, Button, message, Drawer,Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
 import Style from "./style.less";
 import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
 import {isEmpty} from '../../utils/utils';
 import OptionsView from '../Company/Options';
+import CompanyProfile from './DrawerView';
+import JobProfile from "../Job/DrawerView";
 
 
 class CompanyListView extends Component {
@@ -19,6 +21,7 @@ class CompanyListView extends Component {
       currIndex: 1,
       pageSize: Data.PAGINATION_INFO.pageSize,
       isShowDialog: false,
+      isShowDrawer:false,
       info: {}
     };
   }
@@ -31,7 +34,7 @@ class CompanyListView extends Component {
     let info = {
       pageIndex: this.state.currIndex,
       pageSize: this.state.pageSize,
-      state: 1,
+      // state: 1,
     };
 
     RecruitApi.companyList(info, (resp)=> {
@@ -45,7 +48,7 @@ class CompanyListView extends Component {
   }
 
   render() {
-    let {data, loading, isShowDialog, info} = this.state;
+    let {data, loading, isShowDialog,isShowDrawer, info} = this.state;
     const columns = [
       {
         title: '公司名称',
@@ -53,54 +56,14 @@ class CompanyListView extends Component {
         dataIndex: 'companyName',
       },
       {
-        title: '公司介绍',
-        align: 'center',
-        dataIndex: 'companySummary',
-      },
-      {
-        title: '上班时间',
-        align: 'center',
-        dataIndex: 'startDate',
-      },
-      {
         title: '法定营业人',
         align: 'center',
         dataIndex: 'legalPerson',
       },
       {
-        title: '注册时间',
-        align: 'center',
-        dataIndex: 'registerDate',
-      },
-      {
         title: '经营状态',
         align: 'center',
         dataIndex: 'managementName',
-      },
-      {
-        title: '注册地址',
-        align: 'center',
-        dataIndex: 'registerAddress',
-      },
-      {
-        title: '信用代码',
-        align: 'center',
-        dataIndex: 'unifiedCreditCode',
-      },
-      {
-        title: '规模大小',
-        align: 'center',
-        dataIndex: 'scaleName',
-      },
-      {
-        title: '经营领域',
-        align: 'center',
-        dataIndex: 'scope',
-      },
-      {
-        title: '公司地址',
-        align: 'center',
-        dataIndex: 'cityName',
       },
       {
         title: '详情',
@@ -111,13 +74,22 @@ class CompanyListView extends Component {
           </div>
         ),
       },
+      {
+        title: '详情',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.drawer(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
+      },
     ];
 
     return (
       <div>
         {isShowDialog &&
         <Modal
-          style={{marginBottom: '30rem'}}
+          style={{ marginBottom: '30rem' }}
           destroyOnClose="true"
           width={820}
           title={'公司详情'}
@@ -131,7 +103,27 @@ class CompanyListView extends Component {
           />
         </Modal>
         }
+        {isShowDrawer &&
+        <Drawer
+          width={1000}
+          title="公司信息"
+          placement="right"
+          closable={true}
+          onClose={() => this.onDrawDismiss()}
+          visible={true}
+          footer={null}
+        >
+          <CompanyProfile startDate={info.startDate} companyName={info.companyName} id={info.id}
+                          companySummary={info.companySummary} endDate={info.endDate}
+                          legalPerson={info.legalPerson} registerDate={info.registerDate}
+                          registerAddress={info.registerAddress}
+                          unifiedCreditCode={info.unifiedCreditCode} scaleName={info.scaleName}
+                          scope={info.scope} cityName={info.cityName}
+                          industryName={info.industryName}   managementName={info.managementName}
+          />
 
+        </Drawer >
+        }
         <div className={Style.btnLayout}>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
@@ -168,7 +160,12 @@ class CompanyListView extends Component {
       isShowDialog: true,
     });
   }
-
+  drawer(info){
+    this.setState({
+      info: info,
+      isShowDrawer: true,
+    });
+  }
   onDialogDismiss(showRefresh= false) {
     this.setState({
       isShowDialog: false
@@ -178,13 +175,15 @@ class CompanyListView extends Component {
       }
     })
   }
-  onDelClick(id) {
-    RecruitApi.deleteCompany(id, (resp) => {
-      message.success('删除公司信息成功');
-      this.refreshList();
-    }, (error) => {
+  onDrawDismiss(showRefresh= false) {
+    this.setState({
+      isShowDrawer: false
+    }, () => {
+      if(showRefresh) {
+        this.refreshList();
+      }
+    })
 
-    });
   }
 }
 

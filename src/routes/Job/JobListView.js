@@ -71,88 +71,6 @@ class JobListView extends Component {
         dataIndex: 'realName',
       },
       {
-        title: '职位内容',
-        align: 'center',
-        dataIndex: 'jobContent',
-      },
-      {
-        title: '职位类型',
-        align: 'center',
-        dataIndex: 'positionTypeName',
-      },
-      {
-        title: '工作地址',
-        align: 'center',
-        dataIndex: 'workAddress',
-
-      },
-      {
-        title: '最低薪资',
-        align: 'center',
-        dataIndex: 'minSalary',
-
-      },
-      {
-        title: '最高薪资',
-        align: 'center',
-        dataIndex: 'maxSalary',
-
-      },
-      {
-        title: '行业类型',
-        align: 'center',
-        dataIndex: 'industryName',
-
-      },
-      {
-        title: '岗位类型',
-        align: 'center',
-        dataIndex: 'positionName',
-
-      },
-      {
-        title: '工作城市',
-        align: 'center',
-        dataIndex: 'cityName',
-
-      },
-      {
-        title: '学历要求',
-        align: 'center',
-        dataIndex: 'educationName',
-
-      },
-      {
-        title: '经验要求',
-        align: 'center',
-        dataIndex: 'workDateName',
-
-      },
-      {
-        title: '职业分类',
-        align: 'center',
-        dataIndex: 'positionTypeName',
-
-      },
-      {
-        title: '性别要求',
-        align: 'center',
-        dataIndex: 'sex',
-
-      },
-      {
-        title: '最小年龄',
-        align: 'center',
-        dataIndex: 'minAge',
-
-      },
-      {
-        title: '最大年龄',
-        align: 'center',
-        dataIndex: 'maxAge',
-
-      },
-      {
         title: '查看详情',
         align: 'center',
         dataIndex: 'id',
@@ -183,7 +101,8 @@ class JobListView extends Component {
                       jobContent={info.jobContent} positionTypeName={info.positionTypeName}
                       industryName={info.industryName} positionName={info.positionName}
                       educationName={info.educationName} workDateName={info.workDateName}
-                      sex={info.sex}
+                      sex={info.sex} maxSalary={info.maxSalary} minSalary={info.minSalary}
+                      maxAge={info.maxAge} minAge={info.minAge}
           />
         </Drawer>
         }

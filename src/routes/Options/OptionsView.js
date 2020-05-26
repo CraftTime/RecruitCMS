@@ -14,6 +14,9 @@ import WorkDateListView from './workdate/WorkDateListView';
 import ScaleListView from './scale/ScaleListView';
 import SalaryListView from './salary/SalaryListView';
 import EducationListView from './education/EducationListView';
+import ManagementListView from './managemant/ManagementListView';
+import JobStateListView from './JobState/JobStateListView';
+
 const FormItem = Form.Item;
 
 const {TabPane} = Tabs;
@@ -53,21 +56,23 @@ class OptionsView extends Component {
               <TreatmentListView/>
             </TabPane>
 
-            <TabPane tab="工作经验" key="7">
-            </TabPane>
-
-            <TabPane tab="工作时间" key="8">
+            <TabPane tab="工作时间" key="7">
               <WorkDateListView/>
             </TabPane>
 
-            <TabPane tab="公司规模" key="9">
+            <TabPane tab="公司规模" key="8">
               <ScaleListView/>
             </TabPane>
 
-            <TabPane tab="薪资待遇" key="10">
+            <TabPane tab="薪资待遇" key="9">
               <SalaryListView/>
             </TabPane>
-
+            <TabPane tab=" 经营状态" key="10">
+              <ManagementListView/>
+            </TabPane>
+            <TabPane tab=" 求职状态" key="11">
+              <JobStateListView/>
+            </TabPane>
           </Tabs>
 
         </Card>

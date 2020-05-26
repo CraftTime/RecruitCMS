@@ -17,6 +17,7 @@ class WorkDateListView extends Component {
       data: [],
       loading: false,
       currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
       isShowDialog: false,
       info: {}
     };
@@ -33,7 +34,7 @@ class WorkDateListView extends Component {
       {
         title: '时间',
         align: 'center',
-        dataIndex: 'workDateName'
+        dataIndex: 'workDateName',
       },
       {
         title: '操作',
@@ -63,7 +64,7 @@ class WorkDateListView extends Component {
         <Modal
           style={{marginBottom: '30rem'}}
           destroyOnClose="true"
-          title={isEmpty(info) ? '新增年龄选项' : '编辑年龄选项'}
+          title={isEmpty(info) ? '新增工作时间选项' : '编辑工作时间选项'}
           onCancel={() => this.onDialogCancel()}
           visible={true}
           footer={null}
@@ -105,7 +106,8 @@ class WorkDateListView extends Component {
 
   onPageChange(page, pageSize) {
     this.setState({
-      currIndex: page
+      currIndex: page.current,
+      pageSize: page.pageSize
     }, () => {
       this.refreshList();
     });
@@ -114,12 +116,12 @@ class WorkDateListView extends Component {
   refreshList() {
     let info = {
       pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
+      pageSize: this.state.pageSize
     };
 
     RecruitApi.listWorkDate(info, (resp) => {
       this.setState({
-        data: resp.data
+        data: resp.data,
       });
     }, (error) => {
       message.error('获取工作时间失败: ' + JSON.stringify(error));
@@ -127,7 +129,7 @@ class WorkDateListView extends Component {
   }
 
   onDelClick(id) {
-    RecruitApi.deleteAge(id, (resp) => {
+    RecruitApi.deleteWorkDate(id, (resp) => {
       message.success('删除工作时间成功');
       this.refreshList();
     }, (error) => {

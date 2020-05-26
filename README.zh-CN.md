@@ -2,7 +2,7 @@
 yield put({type: 'one-namespace/reducerFunction', payload});
 
 二：上线的静态资源的地址，
-（一定要注意修改，这个地址，不然 npm run build出现的 /dist/ 目录下 index.html中引用 xxx.css 和 引用 xxx.js 的路径会不对）
+（一定要注意修改，这个地址，不然 npm run build出现的 /dist/ 目录下 index.html中引用 xxx.css 和 引用 xxxEditView.js 的路径会不对）
 "publicPath": "https://www.jichuangtech.site/nbaDataSite/",   -->  服务器上线
 "publicPath": "/",                                              -->  本地地址 
 本地
@@ -31,7 +31,7 @@ clone()
 Response.error()
 Response.redirect()
 
-四：package.json文件中
+四：packageEditView.json文件中
 name 字段的属性值不可以有空格，不然会出问题
 
 # Ant Design Pro

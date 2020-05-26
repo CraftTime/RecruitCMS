@@ -17,6 +17,7 @@ class PositionListView extends Component {
       data: [],
       loading: false,
       currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
       isShowDialog: false,
       info: {},
       count: 1,
@@ -108,7 +109,8 @@ class PositionListView extends Component {
 
   onPageChange(page, pageSize) {
     this.setState({
-      currIndex: page,
+      currIndex: page.current,
+      pageSize:page.pageSize
     }, () => {
       this.refreshList();
     });
@@ -117,7 +119,7 @@ class PositionListView extends Component {
   refreshList() {
     let info = {
       pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
+      pageSize: this.state.pageSize
     };
 
     RecruitApi.listPosition(info, (resp) => {

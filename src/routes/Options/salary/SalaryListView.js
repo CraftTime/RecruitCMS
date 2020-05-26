@@ -14,12 +14,12 @@ class SalaryListView extends Component {
 		super(props);
 
 		this.state = {
-			data: [{key:0,minSalary:"6k",maxSalary:"10k"}],
+			data: [],
 			loading: false,
 			currIndex: 1,
+      pageSize: Data.PAGINATION_INFO.pageSize,
 			isShowDialog: false,
 			info: {},
-      count:1,
 		};
 	}
 
@@ -32,12 +32,12 @@ class SalaryListView extends Component {
 		let {data, loading, isShowDialog, info,modifyIdx,count} = this.state;
 		const columns = [
 			{
-				title: '最低薪水',
+				title: '最低薪水/k',
 				align: 'center',
 				dataIndex: 'minSalary',
 			},
 			{
-				title: '最高薪水',
+				title: '最高薪水/k',
 				align: 'center',
 				dataIndex: 'maxSalary',
 			},
@@ -50,7 +50,7 @@ class SalaryListView extends Component {
 
 						<Popconfirm title="是否要删除该选项？"
 						            onConfirm={() => {
-							            this.onDelClick(record.key)
+							            this.onDelClick(record.id)
 						            }}
 						            okText="确定" cancelText="取消">
 							<Button type="normal" shape="circle" icon="delete"/>
@@ -75,22 +75,6 @@ class SalaryListView extends Component {
         >
           <EditView
             info={info}
-            count={count}
-            modifySucess={(age) => {
-              if(modifyIdx==-1){
-                this.setState({count:count+1})
-                message.success('增添成功');
-                data.push(age);
-
-              } else {
-                message.success('修改成功');
-                data[modifyIdx].minSalary = age.minSalary;
-                data[modifyIdx].maxSalary = age.maxSalary;
-              }
-              this.setState({
-                isShowDialog: false,
-              });
-            }}
             onDialogDismiss={() => {
               this.setState({
                 isShowDialog: false
@@ -126,7 +110,8 @@ class SalaryListView extends Component {
 
   onPageChange(page, pageSize) {
     this.setState({
-      currIndex: page,
+      currIndex: page.current,
+      pageSize: page.pageSize
     }, () => {
       this.refreshList();
     });
@@ -135,10 +120,10 @@ class SalaryListView extends Component {
   refreshList() {
     let info = {
       pageIndex: this.state.currIndex,
-      pageSize: Data.PAGINATION_INFO.pageSize
+      pageSize: this.state.pageSize
     };
 
-    RecruitApi.listAge(info, (resp) => {
+    RecruitApi.listSalary(info, (resp) => {
       this.setState({
         data: resp.data,
       });
@@ -147,17 +132,14 @@ class SalaryListView extends Component {
     });
   }
 
-  onDelClick(key) {
+  onDelClick(id) {
 
-    const data = [...this.state.data];
-    this.setState({ data: data.filter(item => item.key !== key) });
+    RecruitApi.deleteWorkSalary(id, (resp) => {
+      message.success('删除年龄成功');
+      this.refreshList();
+    }, (error) => {
 
-    // RecruitApi.deleteAge(id, (resp) => {
-    //   message.success('删除年龄成功');
-    //   this.refreshList();
-    // }, (error) => {
-    //
-    // });
+    });
   }
 
   onDialogCancel() {

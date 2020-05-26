@@ -26,13 +26,13 @@ class EditView extends Component {
 
 				<FormItem
 					{...Data.FORM_ITEM_LAYOUT}
-					label="城市"
+					label="城市名称"
 					hasFeedback
 				>
 					{getFieldDecorator('cityName', {
 						initialValue: isEmpty(info) ? '' : info.cityName,
 						rules: [{
-							required: true, message: '请输入点击量',
+							required: true, message: '请输入城市信息',
 						}],
 					})(
 						<Input
@@ -72,10 +72,10 @@ class EditView extends Component {
 
 				RecruitApi.updateOrAddCity(info, (resp)=> {
 
-					message.info(`${this.isAdd() ? '新增' : '编辑'}关于成功`);
+					message.info(`${this.isAdd() ? '新增' : '编辑'}城市成功`);
 					this.props.onDialogDismiss();
 				}, (error)=> {
-					message.info(`${this.isAdd() ? '新增' : '编辑'}关于失败: ${JSON.stringify(error)}`);
+					message.info(`${this.isAdd() ? '新增' : '编辑'}城市失败: ${JSON.stringify(error)}`);
 				});
 
 			}
