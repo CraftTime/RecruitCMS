@@ -61,15 +61,6 @@ class JobSeekerListView extends Component {
         render: (val, record, index) => (<img className={Style.listItemIcon} src={val} alt="暂无图片"/>)
       },
       {
-        title: '查看详情',
-        align: 'center',
-        dataIndex: 'id',
-        render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn}  onClick={() => this.detail(record)} type="normal" shape="circle" icon="info"/>
-          </div>
-        ),
-      },
-      {
         title: '查看简历',
         align: 'center',
         dataIndex: 'id',
@@ -78,6 +69,25 @@ class JobSeekerListView extends Component {
           </div>
         ),
       },
+      {
+        title: '面试记录',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.drawer(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
+      },
+      {
+        title: '收藏与屏蔽信息',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.detail(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
+      },
+
     ];
 
     return (
@@ -88,8 +98,8 @@ class JobSeekerListView extends Component {
         <Modal
           style={{ marginBottom: '30rem' }}
           destroyOnClose="true"
-          width={1200}
-          title={'详情信息'}
+          width={850}
+          title={'收藏与屏蔽信息'}
           onCancel={() => this.onDetailDismiss()}
           visible={true}
           footer={null}
@@ -107,7 +117,7 @@ class JobSeekerListView extends Component {
           visible={true}
           footer={null}
         >
-         <BasicProfile realName={info.realName} avatar={info.avatar} id={info.id}/>
+         <BasicProfile avatar={info.avatar} id={info.id}/>
         </Drawer >
         }
         <div className={Style.btnLayout}>

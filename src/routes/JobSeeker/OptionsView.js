@@ -30,23 +30,23 @@ class OptionsView extends Component {
 
       <Tabs onChange={(key) => this.callback(key)} type="card">
 
-        <TabPane tab="基础信息" key="1" id={id}>
-          <Detail id={id}/>
-        </TabPane>
-        <TabPane tab="求职期望" key="8" id={id}>
-          <JobExpectListView id={id}/>
-        </TabPane>
-        <TabPane tab="工作经历" key="2" id={id}>
-          <WorkExpListView id={id}/>
-        </TabPane>
+        {/*<TabPane tab="基础信息" key="1" id={id}>*/}
+        {/*  <Detail id={id}/>*/}
+        {/*</TabPane>*/}
+        {/*<TabPane tab="求职期望" key="8" id={id}>*/}
+        {/*  <JobExpectListView id={id}/>*/}
+        {/*</TabPane>*/}
+        {/*<TabPane tab="工作经历" key="2" id={id}>*/}
+        {/*  <WorkExpListView id={id}/>*/}
+        {/*</TabPane>*/}
 
-        <TabPane tab="教育经历" key="3" id={id}>
-          <EducationExpView id={id}/>
-        </TabPane>
+        {/*<TabPane tab="教育经历" key="3" id={id}>*/}
+        {/*  <EducationExpView id={id}/>*/}
+        {/*</TabPane>*/}
 
-        <TabPane tab="项目经历" key="4" id={id}>
-          <ProjectExpView id={id}/>
-        </TabPane>
+        {/*<TabPane tab="项目经历" key="4" id={id}>*/}
+        {/*  <ProjectExpView id={id}/>*/}
+        {/*</TabPane>*/}
 
         <TabPane tab="收藏公司" key="5" id={id}>
           <CompanyStarListView id={id}/>
