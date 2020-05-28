@@ -7,7 +7,6 @@ import PaginationTable from '../../../components/PaginationTable/PaginationTable
 import * as RecruitApi from '../../../services/RecruitApi';
 import {isEmpty} from "../../../utils/utils";
 import EditView from "../Root/EditView";
-import { Line } from '@antv/g2plot';
 
 class RootListView extends Component {
   constructor(props) {

@@ -16,8 +16,8 @@
     "template": "./src/index.ejs"
   },
  "publicPath": "/",
- // "publicPath": "https://www.yk0591.com/FuJianArtExamCMS/",
-  //"publicPath": "https://www.jichuangtech.site/FuJianArtExamCMS/",
+ // "publicPath": "http://34.229.235.238/RecruitCMS/",
+
   "disableDynamicImport": false,
   "hash": true
 }
