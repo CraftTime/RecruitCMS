@@ -29,9 +29,9 @@ class HomeView extends Component {
               <HomeListView id={id}/>
             </TabPane>
 
-            <TabPane tab="用户权限" key="3">
-              <RootListView id={id}/>
-            </TabPane>
+            {/*<TabPane tab="用户权限" key="3">*/}
+            {/*  <RootListView id={id}/>*/}
+            {/*</TabPane>*/}
 
             {/*<TabPane tab="岗位信息" key="4">*/}
             {/*  <JobListView  id={id}/>*/}
