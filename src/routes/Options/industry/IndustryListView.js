@@ -44,7 +44,7 @@ class IndustryListView extends Component {
         align: 'center',
         dataIndex: 'id',
         render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn}  onClick={() => this.detail(record)} type="normal" shape="circle" icon="info"/>
+            {/*<Button className={Style.mainOperateBtn}  onClick={() => this.detail(record)} type="normal" shape="circle" icon="info"/>*/}
             <Button className={Style.mainOperateBtn} onClick={() => this.onEdit(record)} type="normal" shape="circle"
                     icon="edit"/>
 

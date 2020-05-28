@@ -48,21 +48,21 @@ const menuData = [
     icon: 'gift',
     path: 'company',
   },
-  {
-    name: '通知管理',
-    icon: 'book',
-    path: 'notification',
-  },
+  // {
+  //   name: '通知管理',
+  //   icon: 'book',
+  //   path: 'notification',
+  // },
   {
     name: '用户反馈',
     icon: 'setting',
     path: 'feedback',
   },
-  {
-    name: '软件信息',
-    icon: 'setting',
-    path: 'app',
-  },
+  // {
+  //   name: '软件信息',
+  //   icon: 'setting',
+  //   path: 'app',
+  // },
   {
     name: '基础配置管理',
     icon: 'setting',

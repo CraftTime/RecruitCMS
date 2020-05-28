@@ -69,15 +69,15 @@ class JobSeekerListView extends Component {
           </div>
         ),
       },
-      {
-        title: '面试记录',
-        align: 'center',
-        dataIndex: 'id',
-        render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn}  onClick={() => this.drawer(record)} type="normal" shape="circle" icon="info"/>
-          </div>
-        ),
-      },
+      // {
+      //   title: '面试记录',
+      //   align: 'center',
+      //   dataIndex: 'id',
+      //   render: (val, record) => (<div>
+      //       <Button className={Style.mainOperateBtn}  onClick={() => this.drawer(record)} type="normal" shape="circle" icon="info"/>
+      //     </div>
+      //   ),
+      // },
       {
         title: '收藏与屏蔽信息',
         align: 'center',

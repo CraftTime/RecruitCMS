@@ -65,15 +65,15 @@ class CompanyListView extends Component {
         align: 'center',
         dataIndex: 'managementName',
       },
-      {
-        title: '详情',
-        align: 'center',
-        dataIndex: 'id',
-        render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="info"/>
-          </div>
-        ),
-      },
+      // {
+      //   title: '详情',
+      //   align: 'center',
+      //   dataIndex: 'id',
+      //   render: (val, record) => (<div>
+      //       <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="info"/>
+      //     </div>
+      //   ),
+      // },
       {
         title: '详情',
         align: 'center',
