@@ -1,14 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal,Drawer} from 'antd';
 import Style from "../style.less";
 import * as Data from '../../../data/data';
 import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../../services/RecruitApi';
 // import EditView from './EditView';
 import {isEmpty} from '../../../utils/utils';
-import OptionsView from './Options';
-
+// import OptionsView from './Options';
+import CompanyProfile from '../../Company/DrawerView';
 
 class CompanyListView extends Component {
   constructor(props) {
@@ -44,55 +44,13 @@ class CompanyListView extends Component {
         dataIndex: 'companyName',
       },
       {
-        title: ' 公司职位',
+        title: ' 公司概况',
         align: 'center',
         dataIndex: 'companySummary',
       },
-      {
-        title: ' 法定营业人',
-        align: 'center',
-        dataIndex: 'legalPerson',
-      },
-      {
-        title: ' 注册资金',
-        align: 'center',
-        dataIndex: 'registerCapital',
-      },
-      {
-        title: ' 注册时间',
-        align: 'center',
-        dataIndex: 'registerDate',
-      },
-      {
-        title: ' 注册地址',
-        align: 'center',
-        dataIndex: 'registerAddress',
-      },
-      {
-        title: ' 统一信用代码',
-        align: 'center',
-        dataIndex: 'unifiedCreditCode',
-      },
-      {
-        title: ' 经营状态',
-        align: 'center',
-        dataIndex: 'managementName',
-      },
-      {
-        title: '公司规模',
-        align: 'center',
-        dataIndex: 'scaleName',
-      },
-      {
-        title: '经营范围',
-        align: 'center',
-        dataIndex: 'scope',
-      },
-      {
-        title: '行业名称',
-        align: 'center',
-        dataIndex: 'industryName',
-      },
+
+
+
       {
         title: '详情',
         align: 'center',
@@ -108,25 +66,29 @@ class CompanyListView extends Component {
           }}>刷新</Button>
         </div>
         {isShowDetail &&
-        <Modal
+        <Drawer
           style={{marginBottom: '30rem'}}
           destroyOnClose="true"
-          width={820}
-          title={isEmpty(info) ? '新增招聘者信息' : '编辑招聘者信息'}
-          onCancel={() =>  this.onDetailDismiss()}
+          width={1200}
+          title={'所属公司信息'}
+          onClose={() =>  this.onDetailDismiss()}
           visible={true}
           footer={null}
         >
-          <OptionsView
+          <CompanyProfile
             info={info}
             companyId={this.props.companyId}
-            // onDialogDismiss={()=> this.onDialogDismiss(true)}
+            startDate={info.startDate} companyName={info.companyName} id={info.id}
+            companySummary={info.companySummary} endDate={info.endDate}
+            legalPerson={info.legalPerson} registerDate={info.registerDate}
+            registerAddress={info.registerAddress}
+            unifiedCreditCode={info.unifiedCreditCode} scaleName={info.scaleName}
+            scope={info.scope} cityName={info.cityName}
+            industryName={info.industryName}   managementName={info.managementName}
           />
-        </Modal>
+        </Drawer>
         }
         <Table
-          size="small"
-          bordered
           dataSource={newDate}
           loading={loading}
           columns={columns}

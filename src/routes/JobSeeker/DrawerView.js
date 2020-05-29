@@ -243,8 +243,7 @@ export default class BasicProfile extends Component {
             <Description term="工作时间">{data[0].resume.workExp}</Description>
             <Description term="学历">{data[0].resume.educationName}</Description>
             <Description term="工作经验">{data[0].resume.workDateName}</Description>
-            <Description term="最低薪资要求">{data[0].resume.minSalary}</Description>
-            <Description term="最高薪资要求">{data[0].resume.maxSalary}</Description>
+            <Description term="薪资要求">{data[0].resume.minSalary+'k'+'~'+data[0].resume.maxSalary+'k'}</Description>
             <Description term="住址" layout="vertical" style={ {width:400} } >{data[0].resume.address}</Description>
             <Description term="个人主页" layout="vertical">{data[0].resume.socialHomepage}</Description>
           </DescriptionList>
@@ -255,7 +254,7 @@ export default class BasicProfile extends Component {
             <Description term="期望职业">{expect[0].positionName}</Description>
             <Description term="行业类型">{expect[0].industryName}</Description>
             <Description term="期望工作城市">{expect[0].cityName}</Description>
-            <Description term="期望薪资">{`${expect[0].minSalary}~${expect[0].maxSalary}`}</Description>
+            <Description term="期望薪资">{`${expect[0].minSalary}k~${expect[0].maxSalary}k`}</Description>
             <Description term="备注">无</Description>
           </DescriptionList>
           <Divider style={{ marginBottom: 32 }} />

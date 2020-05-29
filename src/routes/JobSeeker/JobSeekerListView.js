@@ -9,6 +9,7 @@ import {isEmpty} from '../../utils/utils';
 import OptionsView from './OptionsView';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import BasicProfile from './DrawerView';
+import InterviewListView from './Interview';
 
 class JobSeekerListView extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class JobSeekerListView extends Component {
       info: {},
       isShowDetail: false,
       isShowDrawer: false,
+      isShowInterview: false,
     };
   }
 
@@ -46,7 +48,7 @@ class JobSeekerListView extends Component {
   }
 
   render() {
-    let {data, loading, info, isShowDetail,isShowDrawer,} = this.state;
+    let {data, loading, info, isShowDetail,isShowDrawer,isShowInterview,} = this.state;
 
     const columns = [
       {
@@ -69,15 +71,15 @@ class JobSeekerListView extends Component {
           </div>
         ),
       },
-      // {
-      //   title: '面试记录',
-      //   align: 'center',
-      //   dataIndex: 'id',
-      //   render: (val, record) => (<div>
-      //       <Button className={Style.mainOperateBtn}  onClick={() => this.drawer(record)} type="normal" shape="circle" icon="info"/>
-      //     </div>
-      //   ),
-      // },
+      {
+        title: '面试记录',
+        align: 'center',
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.interview(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
+      },
       {
         title: '收藏与屏蔽信息',
         align: 'center',
@@ -120,6 +122,19 @@ class JobSeekerListView extends Component {
          <BasicProfile avatar={info.avatar} id={info.id}/>
         </Drawer >
         }
+        {isShowInterview &&
+        <Drawer
+          width={1000}
+          title="面试记录"
+          placement="right"
+          closable={true}
+          onClose={() => this.onInterviewDismiss()}
+          visible={true}
+          footer={null}
+        >
+          <InterviewListView id={info.id}/>
+        </Drawer >
+        }
         <div className={Style.btnLayout}>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
@@ -158,12 +173,18 @@ class JobSeekerListView extends Component {
     });
   }
 
-  drawer(info){
-   this.setState({
-    info: info,
-    isShowDrawer: true,
-  });
-}
+  drawer(info) {
+    this.setState({
+      info: info,
+      isShowDrawer: true,
+    });
+  }
+  interview(info){
+    this.setState({
+      info: info,
+      isShowInterview: true,
+    });
+  }
   onDetailDismiss(showRefresh= false) {
     this.setState({
       isShowDetail: false
@@ -184,7 +205,16 @@ class JobSeekerListView extends Component {
     })
 
   }
+  onInterviewDismiss(showRefresh= false) {
+    this.setState({
+      isShowInterview: false
+    }, () => {
+      if(showRefresh) {
+        this.refreshList();
+      }
+    })
 
+  }
 }
 
 export default JobSeekerListView;

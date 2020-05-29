@@ -10,6 +10,7 @@ import ShieldListView from './ShieldList/ShieldListView';
 import StarListView from './StarList/StarListView';
 import JobListView from './Job/JobListView';
 import CompanyListView from './CompanyInfo/Company';
+import InterviewListView from './interview';
 
 const FormItem = Form.Item;
 
@@ -33,6 +34,10 @@ class OptionsView extends Component {
 
         <TabPane tab="岗位信息" key="4">
           <JobListView id={id}/>
+        </TabPane>
+
+        <TabPane tab="面试记录" key="5">
+          <InterviewListView id={id}/>
         </TabPane>
 
         <TabPane tab="收藏求职者" key="2">

@@ -30,12 +30,12 @@ class InterviewListView extends Component {
   }
   refreshList() {
     let info = {
-      recruiterId: this.props.id,
+      jobSeekerId: this.props.id,
       pageIndex: this.state.currIndex,
       pageSize: this.state.pageSize,
     };
 
-    RecruitApi.RecruiterInterview(info, (resp)=> {
+    RecruitApi.Interview(info, (resp)=> {
       for(let i = 0; i < resp.data.records.length; i++) {
         resp.data.records[i].interviewDate = this.dateFunction(resp.data.records[i].interviewDate);
         resp.data.records[i].createDate = this.dateFunction(resp.data.records[i].createDate);
@@ -59,11 +59,13 @@ class InterviewListView extends Component {
         align: 'center',
         dataIndex: 'jobName',
       },
+
       {
-        title: '求职者',
+        title: '招聘人',
         align: 'center',
-        dataIndex: 'jobSeekerName',
+        dataIndex: 'recruiterName',
       },
+
       {
         title: '公司名称',
         align: 'center',

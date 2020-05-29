@@ -136,6 +136,7 @@ export default class CompanyProfile extends Component {
           <Description term="注册时间">{registerDate}</Description>
           <Description term="经营状态">{managementName}</Description>
           <Description term="注册地址">{registerAddress} </Description>
+          <Description term="注册资金">{this.state.Data.company.registerCapital} </Description>
           <Description term="信用代码">{unifiedCreditCode}</Description>
           <Description term="公司规模">{scaleName}</Description>
           <Description term="经营范围">{scope}</Description>

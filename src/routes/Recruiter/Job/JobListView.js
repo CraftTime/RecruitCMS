@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal,Drawer} from 'antd';
 import Style from "../style.less";
 import * as Data from '../../../data/data';
 import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../../services/RecruitApi';
 // import EditView from './EditView';
 import {isEmpty} from '../../../utils/utils';
-
+import JobProfile from '../../Job/DrawerView';
 
 class JobListView extends Component {
   constructor(props) {
@@ -42,92 +42,15 @@ class JobListView extends Component {
         align: 'center',
         dataIndex: 'companyName',
       },
-      {
-        title: '招聘者',
-        align: 'center',
-        dataIndex: 'realName',
-      },
-      {
-        title: '职位内容',
-        align: 'center',
-        dataIndex: 'jobContent',
-      },
-      {
-        title: '职位类型',
-        align: 'center',
-        dataIndex: 'positionTypeName',
-      },
-      {
-        title: '工作地址',
-        align: 'center',
-        dataIndex: 'workAddress',
 
-      },
       {
-        title: '最低薪资',
+        title: '查看详情',
         align: 'center',
-        dataIndex: 'minSalary',
-
-      },
-      {
-        title: '最高薪资',
-        align: 'center',
-        dataIndex: 'maxSalary',
-
-      },
-      {
-        title: '行业类型',
-        align: 'center',
-        dataIndex: 'industryName',
-
-      },
-      {
-        title: '岗位类型',
-        align: 'center',
-        dataIndex: 'positionName',
-
-      },
-      {
-        title: '工作城市',
-        align: 'center',
-        dataIndex: 'cityName',
-
-      },
-      {
-        title: '学历要求',
-        align: 'center',
-        dataIndex: 'educationName',
-
-      },
-      {
-        title: '经验要求',
-        align: 'center',
-        dataIndex: 'workDateName',
-
-      },
-      {
-        title: '职业分类',
-        align: 'center',
-        dataIndex: 'positionTypeName',
-
-      },
-      {
-        title: '性别要求',
-        align: 'center',
-        dataIndex: 'sex',
-
-      },
-      {
-        title: '最小年龄',
-        align: 'center',
-        dataIndex: 'minAge',
-
-      },
-      {
-        title: '最大年龄',
-        align: 'center',
-        dataIndex: 'maxAge',
-
+        dataIndex: 'id',
+        render: (val, record) => (<div>
+            <Button className={Style.mainOperateBtn}  onClick={() => this.onEdit(record)} type="normal" shape="circle" icon="info"/>
+          </div>
+        ),
       },
     ];
 
@@ -135,25 +58,24 @@ class JobListView extends Component {
       <div>
 
         {isShowDialog &&
-        <Modal
+        <Drawer
           style={{marginBottom: '30rem'}}
           destroyOnClose="true"
-          title={isEmpty(info) ? '新增关于' : '编辑关于'}
-          onCancel={() => this.onDialogCancel()}
+          title={'发布岗位信息'}
+          onClose={() => this.onDialogCancel()}
           visible={true}
           footer={null}
+          width={1200}
         >
-          {/*<EditView*/}
-          {/*  info={info}*/}
-          {/*  onDialogDismiss={() => {*/}
-          {/*    this.setState({*/}
-          {/*      isShowDialog: false*/}
-          {/*    }, () => {*/}
-          {/*      this.refreshList();*/}
-          {/*    })*/}
-          {/*  }}*/}
-          {/*/>*/}
-        </Modal>
+          <JobProfile realName={info.realName} companyName={info.companyName} id={info.id}
+                      JobSeekerId={info.JobSeekerId} cityName={info.cityName}
+                      workAddress={info.workAddress} jobName={info.jobName}
+                      jobContent={info.jobContent} positionTypeName={info.positionTypeName}
+                      industryName={info.industryName} positionName={info.positionName}
+                      educationName={info.educationName} workDateName={info.workDateName}
+                      sex={info.sex} maxSalary={info.maxSalary} minSalary={info.minSalary}
+                      maxAge={info.maxAge} minAge={info.minAge}/>
+        </Drawer>
         }
 
 
@@ -195,6 +117,16 @@ class JobListView extends Component {
     };
 
     RecruitApi.JobUserList(info, (resp) => {
+      for (let i = 0; i < resp.data.records.length; i++) {
+        if (resp.data.records[i].sex === 1) {
+          resp.data.records[i].sex = '男';
+        }
+        if (resp.data.records[i].sex === 2) {
+          resp.data.records[i].sex = '女';
+        } else {
+          resp.data.records[i].sex = '不限制';
+        }
+      }
       this.setState({
         data: resp.data,
       });

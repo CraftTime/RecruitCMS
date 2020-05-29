@@ -55,6 +55,11 @@ class RecruiterListView extends Component {
         dataIndex: 'realName',
       },
       {
+        title: '昵称',
+        align: 'center',
+        dataIndex: 'userName',
+      },
+      {
         title: '头像',
         align: 'center',
         dataIndex: 'avatar',
@@ -108,7 +113,7 @@ class RecruiterListView extends Component {
           style={{marginBottom: '30rem'}}
           destroyOnClose="true"
           width={1200}
-          title={isEmpty(info) ? '新增反馈' : '编辑反馈'}
+          title={'招聘者详情'}
           onCancel={() => this.onDetailDismiss()}
           visible={true}
           footer={null}
