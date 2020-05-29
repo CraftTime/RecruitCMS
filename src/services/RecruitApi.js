@@ -535,6 +535,17 @@ export async function JobExpectList(JobSeekerId, success, failed) {
     }
   }, success, failed);
 }
+//面试记录
+export async function Interview(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/jobSeeker/interview';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
 //=====================================================================================================================
 //招聘者接口
 export async function recruiter(info, success, failed) {
@@ -590,6 +601,19 @@ export async function CompanyUserList(Id, success, failed) {
     }
   }, success, failed);
 }
+//招聘者面试记录
+export async function RecruiterInterview(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/recruiter/interview';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+
+
 //======================================================================================================================
 //公司信息
 export async function companyList(info, success, failed) {
