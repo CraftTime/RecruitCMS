@@ -751,3 +751,108 @@ export async function RootInfo(info, success, failed) {
     }
   }, success, failed);
 }
+//======================================================================================================================
+//导出接口
+export async function exportAge() {
+  let url = AppUrl.API_SERVER_URL + '/excel/age';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportCity() {
+  let url = AppUrl.API_SERVER_URL + '/excel/city';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportCompany() {
+  let url = AppUrl.API_SERVER_URL + '/excel/company';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportEducation() {
+  let url = AppUrl.API_SERVER_URL + '/excel/education';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportIndustry() {
+  let url = AppUrl.API_SERVER_URL + '/excel/industry';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportJob() {
+  let url = AppUrl.API_SERVER_URL + '/excel/job';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportJobSeeker() {
+  let url = AppUrl.API_SERVER_URL + '/excel/jobSeeker';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportJobState() {
+  let url = AppUrl.API_SERVER_URL + '/excel/jobState';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportPosition() {
+  let url = AppUrl.API_SERVER_URL + '/excel/position';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportPositionType() {
+  let url = AppUrl.API_SERVER_URL + '/excel/positionType';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportRecruiter() {
+  let url = AppUrl.API_SERVER_URL + '/excel/recruiter';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportResume() {
+  let url = AppUrl.API_SERVER_URL + '/excel/resume';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportSalary() {
+  let url = AppUrl.API_SERVER_URL + '/excel/salary';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportScale() {
+  let url = AppUrl.API_SERVER_URL + '/excel/scale';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportTreatment() {
+  let url = AppUrl.API_SERVER_URL + '/excel/treatment';
+  return request(url,{
+    method: 'GET',
+  });
+}
+export async function exportWorkDate() {
+  let url = AppUrl.API_SERVER_URL + '/excel/workDate';
+  return request(url,{
+    method: 'GET',
+  });
+}
+//导入统一接口
+export async function importExcelFile(url, params) {
+  return request(url, {
+    method: 'POST',
+    body: params,
+  });
+}

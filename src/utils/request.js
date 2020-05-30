@@ -28,7 +28,7 @@ function checkStatus(response) {
 		response.blob().then((blob) => {
 			const a = window.document.createElement('a');
 			const downUrl = window.URL.createObjectURL(blob);
-			const filename = response.headers.get('Content-Disposition').split('filename="')[1].split('.');
+			const filename = response.headers.get('Content-disposition').split('filename=')[1].split('.');
 			a.href = downUrl;
 			a.download = `${decodeURI(filename[0])}.${filename[1].split('"')[0]}`;
 			a.click();

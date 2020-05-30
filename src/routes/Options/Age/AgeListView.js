@@ -1,12 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal} from 'antd';
+import {Icon, Form, Input, Button, message, Table, Alert, Badge, Card, Divider, Popconfirm, Modal, Upload} from 'antd';
 import Style from '../style.less';
 import * as Data from '../../../data/data';
 import PaginationTable from '../../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../../services/RecruitApi';
 import EditView from './EditView';
 import {isEmpty} from '../../../utils/utils';
+import IOExcelView from '../../../components/IOExcel/IOExcelView';
+import * as AppUrl from "../../../utils/AppInfo";
 
 
 class AgeListView extends Component {
@@ -96,6 +98,11 @@ class AgeListView extends Component {
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.onEdit(null,-1);
           }}> 添加 </Button>
+          {/*<Button className={Style.mainOperateBtn} type="primary" onClick={() => {*/}
+          {/*  this.onExport();*/}
+          {/*}}> 导出 </Button>*/}
+
+
         </div>
 
         <PaginationTable
@@ -163,6 +170,12 @@ class AgeListView extends Component {
       isShowDialog: true,
     });
   }
+
+  // onExport() {
+  //   RecruitApi.exportAge().then();
+  // }
+
+
 
 }
 

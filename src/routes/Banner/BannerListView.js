@@ -5,8 +5,8 @@ import Style from "./style.less";
 import * as Data from '../../data/data';
 import PaginationTable from '../../components/PaginationTable/PaginationTable';
 import * as RecruitApi from '../../services/RecruitApi';
-import {isEmpty} from "../../utils/utils";
-import EditView from "../Banner/EditView";
+import {isEmpty} from '../../utils/utils';
+import EditView from '../Banner/EditView';
 
 
 class BannerListView extends Component {
@@ -61,7 +61,7 @@ class BannerListView extends Component {
         title: ' 跳转链接',
         align: 'center',
         dataIndex: 'url',
-        width: 1000,
+        render: (val, record, index) => (<a href={val} target={'_blank'}>点击跳转</a>)
       },
       {
         title: '操作',

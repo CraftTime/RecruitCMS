@@ -36,25 +36,7 @@ class ShieldListView extends Component {
         dataIndex: 'jobSeekerName',
       },
 
-      {
-        title: '操作',
-        align: 'center',
-        dataIndex: 'id',
-        render: (val, record) => (<div>
-            <Button className={Style.mainOperateBtn} onClick={() => this.onEdit(record)} type="normal" shape="circle"
-                    icon="edit"/>
 
-            <Popconfirm title="是否要删除该关于？"
-                        onConfirm={() => {
-                          this.onDelClick(record.id)
-                        }}
-                        okText="确定" cancelText="取消">
-              <Button type="normal" shape="circle" icon="delete"/>
-            </Popconfirm>
-
-          </div>
-        ),
-      },
     ];
 
     return (
@@ -87,9 +69,6 @@ class ShieldListView extends Component {
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
           }}>刷新</Button>
-          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-            this.onEdit(null)
-          }}>添加</Button>
         </div>
 
         <PaginationTable

@@ -4,7 +4,7 @@ import fetch from 'dva/fetch';
 import {Card, Upload, Button, Icon, message, Form} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Style from './IOExcelView.less';
-import * as IOApi from '../../services/AppApi';
+import * as RecruitApi from '../../services/RecruitApi';
 import * as HTTPCode from '../../utils/HTTPCode';
 
 const MEG_SHOW_DURATION_SECOND = 2;
@@ -25,12 +25,12 @@ class IOExcelView extends Component {
       return;
     }
     const formData = new FormData();
-    formData.append('excelFile', fileList);
+    formData.append('file', fileList);
     this.setState({
       uploading: true,
     });
 
-    IOApi.importExcelFile(url, formData).then(function (response) {
+    RecruitApi.importExcelFile(url, formData).then(function (response) {
       let code = response.meta.code;
 
       if(HTTPCode.CODE_OK === code) {
@@ -67,7 +67,7 @@ class IOExcelView extends Component {
         });
         return false;
       },
-      accept: '.xls',
+      accept: '.xls,.xlsx,.odt',
     };
 
     return (

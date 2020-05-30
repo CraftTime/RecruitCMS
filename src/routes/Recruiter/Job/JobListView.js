@@ -83,9 +83,9 @@ class JobListView extends Component {
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList()
           }}>刷新</Button>
-          <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
-            this.onEdit(null)
-          }}>添加</Button>
+          {/*<Button className={Style.mainOperateBtn} type="primary" onClick={() => {*/}
+          {/*  this.onEdit(null)*/}
+          {/*}}>添加</Button>*/}
         </div>
 
         <PaginationTable
