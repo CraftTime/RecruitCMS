@@ -175,8 +175,6 @@ class AgeListView extends Component {
   //   RecruitApi.exportAge().then();
   // }
 
-
-
 }
 
 export default AgeListView;

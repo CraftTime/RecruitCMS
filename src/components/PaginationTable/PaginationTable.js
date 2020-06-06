@@ -36,7 +36,7 @@ class PaginationTable extends React.Component {
 					title: '序号',
 					align: 'center',
 					render: (val, record, index) => (
-						<text>{(dataSource.current - 1) * Data.PAGINATION_INFO.pageSize + index + 1}</text>)
+						<text>{(dataSource.current - 1) * dataSource.size + index + 1}</text>)
 				}
 			);
 		}
