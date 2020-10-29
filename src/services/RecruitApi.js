@@ -174,6 +174,34 @@ export async function deletePosition(id, s, f) {
   }, s, f);
 }
 
+//职业类型信息
+export async function listPositionType(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/positionType/list';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+export async function updateOrAddPositionType(info, success, failed) {
+  let url = AppUrl.API_SERVER_URL + '/positionType/save';
+  return request2(url, {
+    method: 'POST',
+    body: JSON.stringify(info),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }, success, failed);
+}
+export async function deletePositionType(id, s, f) {
+  let url = AppUrl.API_SERVER_URL + `/positionType/delete/${id}`;
+  return request2(url, {
+    method: 'DELETE',
+  }, s, f);
+}
+
 //学历信息
 export async function listEducation(info, success, failed) {
   let url = AppUrl.API_SERVER_URL + '/education/list';

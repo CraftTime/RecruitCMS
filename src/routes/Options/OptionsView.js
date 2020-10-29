@@ -16,6 +16,7 @@ import SalaryListView from './salary/SalaryListView';
 import EducationListView from './education/EducationListView';
 import ManagementListView from './managemant/ManagementListView';
 import JobStateListView from './JobState/JobStateListView';
+import PositionTypeListView from "./positionType/PositionTypeListView";
 
 const FormItem = Form.Item;
 
@@ -46,6 +47,10 @@ class OptionsView extends Component {
 
             <TabPane tab="职业" key="4">
               <PositionListView/>
+            </TabPane>
+
+            <TabPane tab="职业类型" key="12">
+              <PositionTypeListView/>
             </TabPane>
 
             <TabPane tab="学历" key="5">
