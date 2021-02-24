@@ -16,8 +16,8 @@
     "template": "./src/index.ejs"
   },
  "publicPath": "/",
-  "publicPath": "http://34.229.235.238/RecruitCMS/",
- // "publicPath": "https://www.onezerobeat.com/RecruitCMS/",
+  //"publicPath": "http://34.229.235.238/RecruitCMS/",
+  "publicPath": "https://www.onezerobeat.com/RecruitCMS/",
 
   "disableDynamicImport": false,
   "hash": true
