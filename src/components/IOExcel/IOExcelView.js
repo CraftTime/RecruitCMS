@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
-import {connect} from 'dva';
-import fetch from 'dva/fetch';
 import {Card, Upload, Button, Icon, message, Form} from 'antd';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Style from './IOExcelView.less';
 import * as RecruitApi from '../../services/RecruitApi';
-import * as HTTPCode from '../../utils/HTTPCode';
+import {isSuccess} from "../../utils/utils";
 
 const MEG_SHOW_DURATION_SECOND = 2;
 
 class IOExcelView extends Component {
+  static defaultProps = {
+    tempUrl:undefined
+  };
 
   state = {
     fileList: null,
     uploading: false,
+    downloading:false,
   };
 
   handleUpload = () => {
@@ -31,30 +32,48 @@ class IOExcelView extends Component {
     });
 
     RecruitApi.importExcelFile(url, formData).then(function (response) {
-      let code = response.meta.code;
-
-      if(HTTPCode.CODE_OK === code) {
+      if(isSuccess(response)) {
+        that.setState({
+          fileList: null
+        });
         message.success(`《${title}》表格导入成功`, MEG_SHOW_DURATION_SECOND);
       } else {
-        message.error(`《${title}》表格导入失败 resultCode: ` + code + ", msg: " + response.response, MEG_SHOW_DURATION_SECOND);
+        message.error(`《${title}》表格导入失败: ${response.msg}`, MEG_SHOW_DURATION_SECOND);
       }
       that.setState({
         uploading: false,
       });
 
     }).catch(function (error) {
+      message.error(`《${title}》表格导入失败`, MEG_SHOW_DURATION_SECOND);
       that.setState({
         uploading: false,
       });
-
     });
 
   };
 
+  exportTemplate=()=>{
+    const {tempUrl} = this.props;
+    this.setState({
+      downloading:true,
+    })
+    RecruitApi.exportTemplate(tempUrl).then(res=> {
+      this.setState({
+        downloading: false,
+      });
+    }).catch(error=> {
+      this.setState({
+        downloading: false,
+      });
+      message.error(' 导出数据表格失败 error: ' + JSON.stringify(error));
+    });
+  }
+
   render() {
     const that = this;
-    const { title, url} = this.props;
-    const {uploading, fileList} = this.state;
+    const { title, url,tempUrl} = this.props;
+    const {uploading, fileList,downloading} = this.state;
     const props = {
       onRemove: file => {
         this.setState({
@@ -81,14 +100,28 @@ class IOExcelView extends Component {
                 <Icon type="upload"/> Select File
               </Button>
             </Upload>
-            <Button
-              type="primary"
-              onClick={this.handleUpload}
-              loading={uploading}
-              style={{marginTop: 16}}
-            >
-              {uploading ? 'Uploading' : 'Start Upload'}
-            </Button>
+
+            <div className={Style.row} style={{marginTop: 16}}>
+              <Button
+                type="primary"
+                onClick={this.handleUpload}
+                loading={uploading}
+              >
+                {uploading ? 'Uploading' : 'Start Upload'}
+              </Button>
+
+              {
+                tempUrl&&
+                <Button
+                  style={{marginLeft:15}}
+                  type="dashed"
+                  loading={downloading}
+                  onClick={()=>this.exportTemplate()}
+                >
+                  File template
+                </Button>
+              }
+            </div>
 
           </div>
         </div>
