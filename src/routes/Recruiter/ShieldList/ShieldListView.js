@@ -104,14 +104,14 @@ class ShieldListView extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error) => {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
   }
 
   onDelClick(id) {
     RecruitApi.deleteShieldt(id, (resp) => {
-      message.success('删除城市成功');
+      message.success('删除成功');
       this.refreshList();
     }, (error) => {
 

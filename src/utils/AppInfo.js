@@ -4,8 +4,9 @@
 //一零跳动接口网址
 // https://www.onezerobeat.com/recruit/admin/swagger-ui.html
 //本地测试服务器
-// const API_SERVER_URL = 'http://34.229.235.238/recruit/admin/';
-const API_SERVER_URL =  'https://www.onezerobeat.com/recruit/admin';
+const API_SERVER_URL = 'http://34.229.235.238/recruit/admin/';
+// const API_SERVER_URL =  'https://www.onezerobeat.com/recruit/admin';
+// const API_SERVER_URL = 'http://192.168.0.109:8856/recruit/admin/';
 //
 const API_OVERSEASSTUDY_SERVER_URL = 'https://www.yk0591.com/overseasstudy';
 const APP_NAME = 'JobPin';

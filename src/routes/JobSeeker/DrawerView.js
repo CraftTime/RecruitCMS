@@ -100,8 +100,8 @@ export default class BasicProfile extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error)=> {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
     RecruitApi.ProjectExpList(info, (resp)=> {
 
@@ -114,16 +114,16 @@ export default class BasicProfile extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error)=> {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
     RecruitApi.JobExpectList(id, (resp)=> {
       this.setState({
         expect: resp.data,
       });
     }, (error)=> {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
   }
   render() {
@@ -250,14 +250,20 @@ export default class BasicProfile extends Component {
           <div style={{ marginTop: 32 }}><Avatar src={avatar} size={100} /></div>
             </div >
           <Divider style={{ marginBottom: 32 }} />
-          <DescriptionList size="large" title="求职期望" style={{ marginBottom: 32 }}>
-            <Description term="期望职业">{expect[0].positionName}</Description>
-            <Description term="行业类型">{expect[0].industryName}</Description>
-            <Description term="期望工作城市">{expect[0].cityName}</Description>
-            <Description term="期望薪资">{`${expect[0].minSalary}k~${expect[0].maxSalary}k`}</Description>
-            <Description term="备注">无</Description>
-          </DescriptionList>
-          <Divider style={{ marginBottom: 32 }} />
+          {
+            expect&&expect.length>0&&
+            <DescriptionList size="large" title="求职期望" style={{ marginBottom: 32 }}>
+              <Description term="期望职业">{expect[0].positionName}</Description>
+              <Description term="行业类型">{expect[0].industryName}</Description>
+              <Description term="期望工作城市">{expect[0].cityName}</Description>
+              <Description term="期望薪资">{`${expect[0].minSalary}k~${expect[0].maxSalary}k`}</Description>
+              <Description term="备注">无</Description>
+            </DescriptionList>
+          }
+          {
+            expect && expect.length > 0 &&
+            <Divider style={{ marginBottom: 32 }} />
+          }
           <div className={styles.title}>教育经历</div>
           <Table
             style={{ marginBottom: 24 }}

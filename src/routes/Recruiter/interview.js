@@ -62,7 +62,7 @@ class InterviewListView extends Component {
       {
         title: '求职者',
         align: 'center',
-        dataIndex: 'jobSeekerName',
+        dataIndex: 'realName',
       },
       {
         title: '公司名称',
@@ -73,7 +73,7 @@ class InterviewListView extends Component {
         title: '岗位薪资',
         align: 'center',
         render: (val, record) => (<div>
-            {this.state.data.records[0].minSalary+'k'+'~'+this.state.data.records[0].maxSalary+'k'}
+            {record.minSalary+'k'+'~'+record.maxSalary+'k'}
           </div>
         ),
       },

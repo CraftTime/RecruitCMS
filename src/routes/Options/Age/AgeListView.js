@@ -94,10 +94,10 @@ class AgeListView extends Component {
         <div className={Style.btnLayout}>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.refreshList();
-          }}> 刷新 </Button>
+          }}>刷新</Button>
           <Button className={Style.mainOperateBtn} type="primary" onClick={() => {
             this.onEdit(null,-1);
-          }}> 添加 </Button>
+          }}>添加</Button>
           {/*<Button className={Style.mainOperateBtn} type="primary" onClick={() => {*/}
           {/*  this.onExport();*/}
           {/*}}> 导出 </Button>*/}

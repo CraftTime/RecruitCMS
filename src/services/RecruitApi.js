@@ -877,6 +877,15 @@ export async function exportWorkDate() {
     method: 'GET',
   });
 }
+
+// 导出模版文件
+export async function exportTemplate(tempUrl) {
+  let url = `${AppUrl.API_SERVER_URL}${tempUrl}`;
+  return request(url,{
+    method: 'GET'
+  });
+}
+
 //导入统一接口
 export async function importExcelFile(url, params) {
   return request(url, {

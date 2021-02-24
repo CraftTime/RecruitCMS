@@ -71,8 +71,8 @@ export default class JobProfile extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error) => {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
     RecruitApi.JobEmploy(id, (resp) => {
       this.setState({
@@ -80,8 +80,8 @@ export default class JobProfile extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error) => {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
     RecruitApi.JobApply(info, (resp) => {
       for (let i = 0; i < resp.data.records.length; i++) {
@@ -94,8 +94,8 @@ export default class JobProfile extends Component {
       });
       // alert(JSON.stringify(this.state.data))
     }, (error) => {
-
-      message.error('获取城市失败: ' + JSON.stringify(error));
+      message.error('请求异常，获取失败');
+      // message.error('' + JSON.stringify(error));
     });
   }
 
